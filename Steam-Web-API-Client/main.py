@@ -112,9 +112,9 @@ class UserInterface:
             # Widgets
             title_head = Label(self.response, text=("Title"))
             playtime_2weeks_head = Label(
-                self.response, text="Playtime in last 2 Weeks")
+                self.response, text="Last 2 Weeks")
             playtime_forever_head = Label(
-                self.response, text="Overall Playtime")
+                self.response, text="Overall")
             separator = Separator(self.response, orient="horizontal")
             icon = Label(self.response, image=self.image_list[i])
             title = Label(self.response, text=self.name_list[i])
