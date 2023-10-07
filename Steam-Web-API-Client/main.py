@@ -5,6 +5,7 @@ from PIL import ImageTk, Image
 import urllib.request
 import io
 import webbrowser
+import json
 
 
 class UserInterface:
@@ -20,6 +21,15 @@ class UserInterface:
         # Variables
         self.api_key = StringVar()
         self.steam_id = StringVar()
+        self.data_path = "Steam-Web-API-Client\data.json"
+        # Read data.json if possible
+        try:
+            with open(self.data_path, "r") as json_file:
+                loaded_data = json.load(json_file)
+                self.api_key.set(loaded_data["api_key"])
+                self.steam_id.set(loaded_data["steam_id"])
+        except json.JSONDecodeError:
+            print("Couldn't read data.json")
         # Widgets
         self.label1 = Label(self.root, text="Web API Key")
         self.label2 = Label(self.root, text="Steam ID")
@@ -51,6 +61,7 @@ class UserInterface:
         self.name_list = []
         self.playtime_2weeks_list = []
         self.playtime_forever_list = []
+        self.input_data = {"api_key": "", "steam_id": ""}
 
     def fetch_icons(self, response: dict, iter: int):
         app_id = response["response"]["games"][iter]["appid"]
@@ -78,6 +89,11 @@ class UserInterface:
         self.playtime_forever_list.append(playtime_forever)
 
     def handler(self, key: str, id: int):
+        # Save Input Data in data.json
+        self.input_data["api_key"] = key
+        self.input_data["steam_id"] = id
+        with open(self.data_path, "w") as json_file:
+            json.dump(self.input_data, json_file)
         # API
         steam = SteamAPI(api_key=key)
         output = steam.get_recently_played_games(steamid=id)
