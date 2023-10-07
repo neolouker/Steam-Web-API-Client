@@ -84,28 +84,38 @@ class UserInterface:
         amount_games = output["response"]["total_count"]
         # Response Window
         self.response = Toplevel()
-        self.response.title("Steam Web API Response")
+        self.response.title("Steam Web API")
         self.response.resizable(True, True)
         # Iteration
         for i in range(amount_games):
+            # Source Information
             self.fetch_icons(response=output, iter=i)
             self.fetch_names(response=output, iter=i)
             self.fetch_playtime_2weeks(response=output, iter=i)
             self.fetch_playtime_forever(response=output, iter=i)
-            # Create label with current ImageTk icon
+            # Widgets
+            title_head = Label(self.response, text=("Title"))
+            playtime_2weeks_head = Label(
+                self.response, text="Playtime in last 2 Weeks")
+            playtime_forever_head = Label(
+                self.response, text="Overall Playtime")
+            separator = Separator(self.response, orient="horizontal")
             icon = Label(self.response, image=self.image_list[i])
-            icon.grid(row=i, column=0, padx=10, pady=10)
-            # Create label for game names
             name = Label(self.response, text=self.name_list[i])
-            name.grid(row=i, column=1, pady=10)
-            # Create label for playtime in last 2 weeks
             playtime_2weeks = Label(
                 self.response, text=self.playtime_2weeks_list[i])
-            playtime_2weeks.grid(row=i, column=2, padx=10, pady=10)
-            # Create label for overall playtime
             playtime_forever = Label(
                 self.response, text=self.playtime_forever_list[i])
-            playtime_forever.grid(row=i, column=3, padx=10, pady=10)
+            # Grid Placement
+            row_begin = i + 2
+            title_head.grid(row=0, column=1, padx=10)
+            playtime_2weeks_head.grid(row=0, column=2, padx=10)
+            playtime_forever_head.grid(row=0, column=3, padx=10)
+            separator.grid(row=1, column=0, columnspan=4, sticky="EW")
+            icon.grid(row=row_begin, column=0, padx=10, pady=10)
+            name.grid(row=row_begin, column=1, pady=10)
+            playtime_2weeks.grid(row=row_begin, column=2, padx=10, pady=10)
+            playtime_forever.grid(row=row_begin, column=3, padx=10, pady=10)
 
         # When the response window is closed, destroy the main window
         self.response.protocol("WM_DELETE_WINDOW", self.on_response_close)
