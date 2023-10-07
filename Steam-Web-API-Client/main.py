@@ -48,8 +48,8 @@ class UserInterface:
         self.button1 = Button(self.root, text="Enter", command=lambda: [
                               self.root.withdraw(), self.handler(key=self.api_key.get(), id=self.steam_id.get())])
         # Grid Placement
-        self.label1.grid(row=0, column=0, padx=20, pady=2)
-        self.label2.grid(row=0, column=1, padx=20, pady=2)
+        self.label1.grid(row=0, column=0, padx=20, pady=(10, 0))
+        self.label2.grid(row=0, column=1, padx=20, pady=(10, 0))
         self.link1.grid(row=1, column=0, padx=20, pady=(0, 10))
         self.link2.grid(row=1, column=1, padx=20, pady=(0, 10))
         self.entry1.grid(row=2, column=0, padx=20, pady=5, sticky="NSEW")
@@ -117,7 +117,7 @@ class UserInterface:
                 self.response, text="Overall Playtime")
             separator = Separator(self.response, orient="horizontal")
             icon = Label(self.response, image=self.image_list[i])
-            name = Label(self.response, text=self.name_list[i])
+            title = Label(self.response, text=self.name_list[i])
             playtime_2weeks = Label(
                 self.response, text=self.playtime_2weeks_list[i])
             playtime_forever = Label(
@@ -129,7 +129,7 @@ class UserInterface:
             playtime_forever_head.grid(row=0, column=3, padx=10)
             separator.grid(row=1, column=0, columnspan=4, sticky="EW")
             icon.grid(row=row_begin, column=0, padx=10, pady=10)
-            name.grid(row=row_begin, column=1, pady=10)
+            title.grid(row=row_begin, column=1, padx=40, pady=10)
             playtime_2weeks.grid(row=row_begin, column=2, padx=10, pady=10)
             playtime_forever.grid(row=row_begin, column=3, padx=10, pady=10)
 
