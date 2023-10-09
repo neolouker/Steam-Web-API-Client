@@ -34,11 +34,11 @@ class UserInterface:
         self.link1 = tk.Label(
             self.root, text="(https://steamcommunity.com/dev/apikey)", foreground="blue", cursor="hand2")
         self.link1.bind(
-            "<Button-1>", lambda: self.open_browser("https://steamcommunity.com/dev/apikey"))
+            "<Button-1>", lambda event: self.open_browser("https://steamcommunity.com/dev/apikey"))
         self.link2 = tk.Label(self.root, text="(https://steamid.io/)",
                               foreground="blue", cursor="hand2")
         self.link2.bind(
-            "<Button-1>", lambda: self.open_browser("https://steamid.io/"))
+            "<Button-1>", lambda event: self.open_browser("https://steamid.io/"))
         self.entry1 = ttk.Entry(
             self.root, textvariable=self.api_key, width=40, justify="center")
         self.entry2 = ttk.Entry(
