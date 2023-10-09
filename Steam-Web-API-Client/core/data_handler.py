@@ -16,6 +16,8 @@ class DataHandler:
                 self.steam_id = loaded_data["steam_id"]
             print(f"Loaded data from {self.data_path}.")
         except (FileNotFoundError, json.JSONDecodeError):
+            self.api_key = ""
+            self.steam_id = ""
             print(f"Couldn't read data from {self.data_path}.")
         return self.api_key, self.steam_id
 
