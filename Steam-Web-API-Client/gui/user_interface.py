@@ -39,11 +39,11 @@ class UserInterface:
                               foreground="blue", cursor="hand2")
         self.link2.bind(
             "<Button-1>", lambda: self.open_browser("https://steamid.io/"))
-        self.entry1 = tk.Entry(
+        self.entry1 = ttk.Entry(
             self.root, textvariable=self.api_key, width=40, justify="center")
-        self.entry2 = tk.Entry(
+        self.entry2 = ttk.Entry(
             self.root, textvariable=self.steam_id, width=40, justify="center")
-        self.button1 = tk.Button(self.root, text="Enter", command=lambda: [
+        self.button1 = ttk.Button(self.root, text="Enter", command=lambda: [
             self.root.withdraw(), self.open_response_window()])
         # Grid Placement
         self.label1.grid(row=0, column=0, padx=20, pady=(10, 0))
