@@ -1,5 +1,5 @@
-from tkinter import *
-from tkinter.ttk import *
+import tkinter as tk
+from tkinter import ttk
 from steam.webapi import WebAPI
 from PIL import ImageTk, Image
 import urllib.request
@@ -11,16 +11,16 @@ import json
 class UserInterface:
     def __init__(self):
         # Root Window
-        self.root = Tk()
+        self.root = tk.Tk()
         self.root.title("Steam Web API")
         # Stretch and Resize
         self.root.resizable(True, True)
-        Grid.rowconfigure(self.root, 0, weight=1)
-        Grid.columnconfigure(self.root, 0, weight=1)
-        Grid.columnconfigure(self.root, 1, weight=1)
+        tk.Grid.rowconfigure(self.root, 0, weight=1)
+        tk.Grid.columnconfigure(self.root, 0, weight=1)
+        tk.Grid.columnconfigure(self.root, 1, weight=1)
         # Variables
-        self.api_key = StringVar()
-        self.steam_id = StringVar()
+        self.api_key = tk.StringVar()
+        self.steam_id = tk.StringVar()
         self.data_path = "Steam-Web-API-Client\data.json"
         # Read data.json if possible
         try:
@@ -31,22 +31,22 @@ class UserInterface:
         except json.JSONDecodeError:
             print("Couldn't read data.json")
         # Widgets
-        self.label1 = Label(self.root, text="Web API Key")
-        self.label2 = Label(self.root, text="Steam ID")
-        self.link1 = Label(
+        self.label1 = tk.Label(self.root, text="Web API Key")
+        self.label2 = tk.Label(self.root, text="Steam ID")
+        self.link1 = tk.Label(
             self.root, text="(https://steamcommunity.com/dev/apikey)", foreground="blue", cursor="hand2")
         self.link1.bind(
             "<Button-1>", lambda event: self.callback("https://steamcommunity.com/dev/apikey"))
-        self.link2 = Label(self.root, text="(https://steamid.io/)",
-                           foreground="blue", cursor="hand2")
+        self.link2 = tk.Label(self.root, text="(https://steamid.io/)",
+                              foreground="blue", cursor="hand2")
         self.link2.bind(
             "<Button-1>", lambda event: self.callback("https://steamid.io/"))
-        self.entry1 = Entry(
+        self.entry1 = tk.Entry(
             self.root, textvariable=self.api_key, width=40, justify="center")
-        self.entry2 = Entry(
+        self.entry2 = tk.Entry(
             self.root, textvariable=self.steam_id, width=40, justify="center")
-        self.button1 = Button(self.root, text="Enter", command=lambda: [
-                              self.root.withdraw(), self.handler(key=self.api_key.get(), id=self.steam_id.get())])
+        self.button1 = tk.Button(self.root, text="Enter", command=lambda: [
+            self.root.withdraw(), self.handler(key=self.api_key.get(), id=self.steam_id.get())])
         # Grid Placement
         self.label1.grid(row=0, column=0, padx=20, pady=(10, 0))
         self.label2.grid(row=0, column=1, padx=20, pady=(10, 0))
@@ -99,7 +99,7 @@ class UserInterface:
         output = steam.get_recently_played_games(steamid=id)
         amount_games = output["response"]["total_count"]
         # Response Window
-        self.response = Toplevel()
+        self.response = tk.Toplevel()
         self.response.title("Steam Web API")
         self.response.resizable(True, True)
         # Iteration
@@ -110,17 +110,17 @@ class UserInterface:
             self.fetch_playtime_2weeks(response=output, iter=i)
             self.fetch_playtime_forever(response=output, iter=i)
             # Widgets
-            title_head = Label(self.response, text=("Title"))
-            playtime_2weeks_head = Label(
+            title_head = tk.Label(self.response, text=("Title"))
+            playtime_2weeks_head = tk.Label(
                 self.response, text="Last 2 Weeks")
-            playtime_forever_head = Label(
+            playtime_forever_head = tk.Label(
                 self.response, text="Overall")
-            separator = Separator(self.response, orient="horizontal")
-            icon = Label(self.response, image=self.image_list[i])
-            title = Label(self.response, text=self.name_list[i])
-            playtime_2weeks = Label(
+            separator = ttk.Separator(self.response, orient="horizontal")
+            icon = tk.Label(self.response, image=self.image_list[i])
+            title = tk.Label(self.response, text=self.name_list[i])
+            playtime_2weeks = tk.Label(
                 self.response, text=self.playtime_2weeks_list[i])
-            playtime_forever = Label(
+            playtime_forever = tk.Label(
                 self.response, text=self.playtime_forever_list[i])
             # Grid Placement
             row_begin = i + 2
