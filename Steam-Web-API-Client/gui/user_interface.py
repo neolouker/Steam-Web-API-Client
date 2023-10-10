@@ -79,16 +79,11 @@ class ResponseWindow:
         self.response.title("Steam Web API")
         self.response.resizable(True, True)
 
-        # Create a canvas with a vertical scrollbar
-        canvas = tk.Canvas(self.response)
-        scrollbar = ttk.Scrollbar(self.response, orient="vertical")
-        scrollbar.pack(side="right", fill="y")
-
-        # Attach the scrollbar to the canvas
-        scrollbar.config(command=canvas.yview)
-
         # Create a canvas with the vertical scrollbar
+        scrollbar = ttk.Scrollbar(self.response, orient="vertical")
         canvas = tk.Canvas(self.response, yscrollcommand=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        scrollbar.config(command=canvas.yview)
         canvas.pack(side="left", fill="both", expand=True)
 
         # Create a frame inside the canvas to hold the widgets
