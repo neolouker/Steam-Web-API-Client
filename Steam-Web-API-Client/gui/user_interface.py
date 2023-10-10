@@ -9,21 +9,22 @@ import os
 
 class UserInterface:
     def __init__(self):
-        # Root Window
+        # Variables
         self.root = tk.Tk()
         self.root.title("Steam Web API")
-
-        # Stretch and Resize
-        self.root.resizable(True, True)
-        tk.Grid.rowconfigure(self.root, 0, weight=1)
-        tk.Grid.columnconfigure(self.root, 0, weight=1)
-        tk.Grid.columnconfigure(self.root, 1, weight=1)
-
-        # Variables
         self.api_key = tk.StringVar()
         self.steam_id = tk.StringVar()
         self.data_path = os.path.join(
             "Steam-Web-API-Client", "data", "data.json")
+        self.icon_path = os.path.join(
+            "Steam-Web-API-Client", "assets", "icon.png")
+
+        # Window Config
+        self.root.resizable(True, True)
+        tk.Grid.rowconfigure(self.root, 0, weight=1)
+        tk.Grid.columnconfigure(self.root, 0, weight=1)
+        tk.Grid.columnconfigure(self.root, 1, weight=1)
+        self.root.iconphoto(True, tk.PhotoImage(file=self.icon_path))
 
         # Read from data\data.json
         self.data_handler = DataHandler(
