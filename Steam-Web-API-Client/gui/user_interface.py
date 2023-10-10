@@ -4,6 +4,7 @@ from tkinter import ttk
 from core.steam_api import SteamAPI
 from core.data_handler import DataHandler
 import webbrowser
+import os
 
 
 class UserInterface:
@@ -21,7 +22,8 @@ class UserInterface:
         # Variables
         self.api_key = tk.StringVar()
         self.steam_id = tk.StringVar()
-        self.data_path = "Steam-Web-API-Client\data\data.json"
+        self.data_path = os.path.join(
+            "Steam-Web-API-Client", "data", "data.json")
 
         # Read from data\data.json
         self.data_handler = DataHandler(
