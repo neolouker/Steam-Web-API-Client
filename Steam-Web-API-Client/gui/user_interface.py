@@ -128,10 +128,10 @@ class ResponseWindow:
             playtime_2weeks_head.grid(row=0, column=2, padx=10)
             playtime_forever_head.grid(row=0, column=3, padx=10)
             separator.grid(row=1, column=0, columnspan=4, sticky="EW")
-            icon.grid(row=row_begin, column=0, padx=10, pady=10)
-            title.grid(row=row_begin, column=1, padx=40, pady=10)
-            playtime_2weeks.grid(row=row_begin, column=2, padx=20, pady=10)
-            playtime_forever.grid(row=row_begin, column=3, padx=20, pady=10)
+            icon.grid(row=row_begin, column=0, padx=10, pady=5)
+            title.grid(row=row_begin, column=1, padx=40, pady=5)
+            playtime_2weeks.grid(row=row_begin, column=2, padx=20, pady=5)
+            playtime_forever.grid(row=row_begin, column=3, padx=20, pady=5)
 
         # Update the scroll region whenever the canvas is updated
         canvas.update_idletasks()
