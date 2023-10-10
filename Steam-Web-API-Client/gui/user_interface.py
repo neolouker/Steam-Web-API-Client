@@ -1,11 +1,8 @@
 # user_interface.py
 import tkinter as tk
 from tkinter import ttk
-from PIL import ImageTk, Image
 from core.steam_api import SteamAPI
 from core.data_handler import DataHandler
-import urllib.request
-import io
 import webbrowser
 
 
@@ -74,29 +71,23 @@ class ResponseWindow:
         self.response = tk.Toplevel(self.root)
         self.response.title("Steam Web API")
         self.response.resizable(True, True)
-        # Information Storage
-        self.image_list = []
-        self.name_list = []
-        self.playtime_2weeks_list = []
-        self.playtime_forever_list = []
         # Data Handler
         self.data_handler = DataHandler(
             data_path=self.data_path, api_key=self.api_key.get(), steam_id=self.steam_id.get())
         # Save Input Data in data\data.json
         self.data_handler.write_data()
         # Steam Web API
-        steam_api = SteamAPI(api_key=self.api_key.get())
-        output = steam_api.get_recently_played_games(
+        self.steam_api = SteamAPI(api_key=self.api_key.get())
+        games = self.steam_api.get_recently_played_games(
             steamid=self.steam_id.get())
-        amount_games = output["response"]["total_count"]
-
+        amount_games = games["response"]["total_count"]
         # Iteration
         for i in range(amount_games):
             # Source Information
-            self.fetch_icons(response=output, iter=i)
-            self.fetch_names(response=output, iter=i)
-            self.fetch_playtime_2weeks(response=output, iter=i)
-            self.fetch_playtime_forever(response=output, iter=i)
+            self.steam_api.fetch_icons(games=games, iteration=i)
+            self.steam_api.fetch_names(games=games, iteration=i)
+            self.steam_api.fetch_playtime_2weeks(games=games, iteration=i)
+            self.steam_api.fetch_playtime_forever(games=games, iteration=i)
             # Widgets
             title_head = tk.Label(self.response, text=("Title"))
             playtime_2weeks_head = tk.Label(
@@ -104,12 +95,12 @@ class ResponseWindow:
             playtime_forever_head = tk.Label(
                 self.response, text="Overall")
             separator = ttk.Separator(self.response, orient="horizontal")
-            icon = tk.Label(self.response, image=self.image_list[i])
-            title = tk.Label(self.response, text=self.name_list[i])
+            icon = tk.Label(self.response, image=self.steam_api.image_list[i])
+            title = tk.Label(self.response, text=self.steam_api.name_list[i])
             playtime_2weeks = tk.Label(
-                self.response, text=self.playtime_2weeks_list[i])
+                self.response, text=self.steam_api.playtime_2weeks_list[i])
             playtime_forever = tk.Label(
-                self.response, text=self.playtime_forever_list[i])
+                self.response, text=self.steam_api.playtime_forever_list[i])
             # Grid Placement
             row_begin = i + 2
             title_head.grid(row=0, column=1, padx=10)
@@ -123,31 +114,6 @@ class ResponseWindow:
 
         # When the response window is closed, destroy the main window
         self.response.protocol("WM_DELETE_WINDOW", self.on_response_close)
-
-    def fetch_icons(self, response: dict, iter: int):
-        app_id = response["response"]["games"][iter]["appid"]
-        icon_hash = response["response"]["games"][iter]["img_icon_url"]
-        icon_url_formatted = "http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg".format(
-            appid=app_id, hash=icon_hash)
-        with urllib.request.urlopen(icon_url_formatted, timeout=5) as image_data:
-            image_file = io.BytesIO(image_data.read())
-        # Create and store ImageTk objects in the list
-        img = ImageTk.PhotoImage(Image.open(image_file))
-        self.image_list.append(img)
-
-    def fetch_names(self, response: dict, iter: int):
-        game_name = response["response"]["games"][iter]["name"]
-        self.name_list.append(game_name)
-
-    def fetch_playtime_2weeks(self, response: dict, iter: int):
-        playtime_2weeks = "%4dh %02dmin" % (
-            divmod(response["response"]["games"][iter]["playtime_2weeks"], 60))
-        self.playtime_2weeks_list.append(playtime_2weeks)
-
-    def fetch_playtime_forever(self, response: dict, iter: int):
-        playtime_forever = "%4dh %02dmin" % (
-            divmod(response["response"]["games"][iter]["playtime_forever"], 60))
-        self.playtime_forever_list.append(playtime_forever)
 
     def on_response_close(self):
         self.root.destroy()
