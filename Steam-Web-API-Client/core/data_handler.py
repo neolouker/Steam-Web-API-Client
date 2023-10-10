@@ -19,7 +19,7 @@ class DataHandler:
             self.api_key = ""
             self.steam_id = ""
             print(f"Couldn't read data from {self.data_path}.")
-        return self.api_key, self.steam_id
+        return [self.api_key, self.steam_id]
 
     def write_data(self):
         self.input_data = {"api_key": "", "steam_id": ""}

@@ -26,8 +26,9 @@ class UserInterface:
         # Read from data\data.json
         self.data_handler = DataHandler(
             data_path=self.data_path, api_key=self.api_key, steam_id=self.steam_id)
-        self.api_key.set(self.data_handler.read_data()[0])
-        self.steam_id.set(self.data_handler.read_data()[1])
+        self.data = self.data_handler.read_data()
+        self.api_key.set(self.data[0])
+        self.steam_id.set(self.data[1])
         # Widgets
         self.label1 = tk.Label(self.root, text="Web API Key")
         self.label2 = tk.Label(self.root, text="Steam ID")
