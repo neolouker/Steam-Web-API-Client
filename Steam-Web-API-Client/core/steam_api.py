@@ -6,7 +6,7 @@ import io
 
 
 class SteamAPI:
-    def __init__(self, api_key):
+    def __init__(self, api_key: str):
         self.api_key = api_key
         self.image_list = []
         self.name_list = []

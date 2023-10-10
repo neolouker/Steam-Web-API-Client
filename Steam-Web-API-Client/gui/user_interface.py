@@ -61,7 +61,7 @@ class UserInterface:
         self.button1.grid(row=3, column=0, columnspan=3,
                           padx=20, pady=(25, 5), sticky="NSEW")
 
-    def open_browser(self, url):
+    def open_browser(self, url: str):
         webbrowser.open_new(url)
 
     def open_response_window(self):

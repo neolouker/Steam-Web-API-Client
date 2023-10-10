@@ -3,7 +3,7 @@ import json
 
 
 class DataHandler:
-    def __init__(self, data_path, api_key, steam_id):
+    def __init__(self, data_path: str, api_key: str, steam_id: str):
         self.data_path = data_path
         self.api_key = api_key
         self.steam_id = steam_id
