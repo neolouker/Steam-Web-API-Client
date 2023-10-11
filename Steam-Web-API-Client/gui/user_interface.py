@@ -102,20 +102,44 @@ class ResponseWindow:
         self.steam_api = SteamAPI(api_key=self.api_key.get())
         games = self.steam_api.get_recently_played_games(
             steamid=self.steam_id.get())
+        summary = self.steam_api.get_player_summaries(
+            steamid=self.steam_id.get())
         amount_games = games["response"]["total_count"]
 
+        # User Information
+        self.avatar = self.steam_api.fetch_avatar(summaries=summary)
+        self.username = self.steam_api.fetch_username(summaries=summary)
+        self.user_status = self.steam_api.fetch_user_status(summaries=summary)
+
+        # Static Widgets
+        avatar = tk.Label(frame, image=self.avatar)
+        username = tk.Label(frame, text=self.username)
+        status = tk.Label(frame, text=self.user_status)
+        separator1 = ttk.Separator(frame, orient="horizontal")
+        title_head = tk.Label(frame, text="Title")
+        playtime_2weeks_head = tk.Label(frame, text="Last 2 Weeks")
+        playtime_forever_head = tk.Label(frame, text="Overall")
+        separator2 = ttk.Separator(frame, orient="horizontal")
+
+        # Grid Placement
+        avatar.grid(row=0, column=0, padx=10, pady=15)
+        username.grid(row=0, column=1, padx=10, pady=15)
+        status.grid(row=0, column=2, padx=10, pady=15)
+        separator1.grid(row=1, column=0, columnspan=4, sticky="EW")
+        title_head.grid(row=2, column=1, padx=10)
+        playtime_2weeks_head.grid(row=2, column=2, padx=10)
+        playtime_forever_head.grid(row=2, column=3, padx=10)
+        separator2.grid(row=3, column=0, columnspan=4, sticky="EW")
+
         for i in range(amount_games):
-            # Source Information
+
+            # Playtime Information
             self.steam_api.fetch_icons(games=games, iteration=i)
             self.steam_api.fetch_names(games=games, iteration=i)
             self.steam_api.fetch_playtime_2weeks(games=games, iteration=i)
             self.steam_api.fetch_playtime_forever(games=games, iteration=i)
 
-            # Widgets
-            title_head = tk.Label(frame, text=("Title"))
-            playtime_2weeks_head = tk.Label(frame, text="Last 2 Weeks")
-            playtime_forever_head = tk.Label(frame, text="Overall")
-            separator = ttk.Separator(frame, orient="horizontal")
+            # Dynamic Widgets
             icon = tk.Label(frame, image=self.steam_api.image_list[i])
             title = tk.Label(frame, text=self.steam_api.name_list[i])
             playtime_2weeks = tk.Label(
@@ -124,11 +148,7 @@ class ResponseWindow:
                 frame, text=self.steam_api.playtime_forever_list[i])
 
             # Grid Placement
-            row_begin = i + 2
-            title_head.grid(row=0, column=1, padx=10)
-            playtime_2weeks_head.grid(row=0, column=2, padx=10)
-            playtime_forever_head.grid(row=0, column=3, padx=10)
-            separator.grid(row=1, column=0, columnspan=4, sticky="EW")
+            row_begin = i + 4
             icon.grid(row=row_begin, column=0, padx=10, pady=5)
             title.grid(row=row_begin, column=1, padx=40, pady=5)
             playtime_2weeks.grid(row=row_begin, column=2, padx=20, pady=5)
