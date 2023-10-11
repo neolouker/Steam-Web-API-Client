@@ -19,7 +19,7 @@ class SteamAPI:
     def get_player_summaries(self, steamid: int) -> dict:
         return self.api.ISteamUser.GetPlayerSummaries(steamids=steamid, format="json")
 
-    def fetch_avatar(self, summaries: dict):
+    def fetch_avatar(self, summaries: dict) -> ImageTk.PhotoImage:
         avatar_url = summaries["response"]["players"][0]["avatar"]
         try:
             with urllib.request.urlopen(avatar_url, timeout=10) as image_data:
@@ -29,10 +29,10 @@ class SteamAPI:
         except Exception as e:
             print("Error fetching avatar:", e)
 
-    def fetch_username(self, summaries: dict):
+    def fetch_username(self, summaries: dict) -> str:
         return summaries["response"]["players"][0]["personaname"]
 
-    def fetch_user_status(self, summaries: dict):
+    def fetch_user_status(self, summaries: dict) -> str:
         state = summaries["response"]["players"][0]["personastate"]
         match state:
             case 0:
