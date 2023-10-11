@@ -3,6 +3,7 @@ from steam.webapi import WebAPI
 from PIL import ImageTk, Image
 import urllib.request
 import io
+import datetime
 
 
 class SteamAPI:
@@ -51,6 +52,12 @@ class SteamAPI:
                 return "Looking to play"
             case default:
                 return ""
+
+    def fetch_last_logoff(self, summaries: dict):
+        last_logoff = summaries["response"]["players"][0]["lastlogoff"]
+        time = datetime.datetime.fromtimestamp(last_logoff)
+        time_formatted = time.strftime("%d.%m.%Y %H:%M")
+        return time_formatted
 
     def fetch_icons(self, games: dict, iteration: int):
         app_id = games["response"]["games"][iteration]["appid"]
