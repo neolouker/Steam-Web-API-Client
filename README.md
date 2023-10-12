@@ -19,4 +19,4 @@ pip install -r requirements.txt
 ### Current State
 
 > **Warning**
-> The app is in early development and not yet publicly available.
+> The client is in early development
