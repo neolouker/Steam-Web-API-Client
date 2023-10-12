@@ -113,24 +113,30 @@ class ResponseWindow:
         self.last_logoff = self.steam_api.fetch_last_logoff(summaries=summary)
 
         # Static Widgets
+        status_head = tk.Label(frame, text="Status")
+        last_logoff_head = tk.Label(frame, text="Last Time Seen")
+        separator1 = ttk.Separator(frame, orient="horizontal")
         avatar = tk.Label(frame, image=self.avatar)
         username = tk.Label(frame, text=self.username)
         status = tk.Label(frame, text=self.user_status)
         last_logoff = tk.Label(frame, text=self.last_logoff)
-        separator1 = ttk.Separator(frame, orient="horizontal")
+        separator2 = ttk.Separator(frame, orient="horizontal")
         playtime_2weeks_head = tk.Label(frame, text="Last 2 Weeks")
         playtime_forever_head = tk.Label(frame, text="Overall")
-        separator2 = ttk.Separator(frame, orient="horizontal")
+        separator3 = ttk.Separator(frame, orient="horizontal")
 
         # Grid Placement
-        avatar.grid(row=0, column=0, padx=5, pady=15)
-        username.grid(row=0, column=1, padx=5, pady=15, sticky="W")
-        status.grid(row=0, column=2, padx=5, pady=15)
-        last_logoff.grid(row=0, column=3, padx=5, pady=15)
+        status_head.grid(row=0, column=2, padx=5, pady=5)
+        last_logoff_head.grid(row=0, column=3, padx=5, pady=5)
         separator1.grid(row=1, column=0, columnspan=4, sticky="WE")
-        playtime_2weeks_head.grid(row=2, column=2, padx=5, sticky="WE")
-        playtime_forever_head.grid(row=2, column=3, padx=5, sticky="WE")
+        avatar.grid(row=2, column=0, padx=5, pady=10)
+        username.grid(row=2, column=1, padx=5, pady=10, sticky="W")
+        status.grid(row=2, column=2, padx=5, pady=10)
+        last_logoff.grid(row=2, column=3, padx=5, pady=10)
         separator2.grid(row=3, column=0, columnspan=4, sticky="WE")
+        playtime_2weeks_head.grid(row=4, column=2, padx=5, sticky="WE")
+        playtime_forever_head.grid(row=4, column=3, padx=5, sticky="WE")
+        separator3.grid(row=5, column=0, columnspan=4, sticky="WE")
 
         for i in range(amount_games):
 
@@ -149,7 +155,7 @@ class ResponseWindow:
                 frame, text=self.steam_api.playtime_forever_list[i])
 
             # Grid Placement
-            row_begin = i + 4
+            row_begin = i + 6
             icon.grid(row=row_begin, column=0, padx=5, pady=5)
             title.grid(row=row_begin, column=1,
                        padx=(5, 30), pady=5, sticky="W")
