@@ -212,8 +212,8 @@ class ResponseWindow:
             icon.grid(row=row_begin, column=0, padx=5, pady=5)
             title.grid(row=row_begin, column=1,
                        padx=(5, 30), pady=5, sticky="W")
-            playtime_2weeks.grid(row=row_begin, column=2, padx=25, pady=5)
-            playtime_forever.grid(row=row_begin, column=3, padx=30, pady=5)
+            playtime_2weeks.grid(row=row_begin, column=2, padx=25, pady=5, sticky="E")
+            playtime_forever.grid(row=row_begin, column=3, padx=30, pady=5, sticky="E")
 
     def config_canvas(self, canvas: tk.Canvas) -> None:
         """Adjust canvas options based on content
