@@ -145,6 +145,7 @@ class ResponseWindow:
         self.response.protocol("WM_DELETE_WINDOW", self.on_response_close)
 
     def create_static_widgets(self, summary: dict, frame: ttk.Frame) -> None:
+        # pylint: disable=too-many-locals
         """Create widgets showing user information
 
         Args:
@@ -153,18 +154,20 @@ class ResponseWindow:
         """
         # User Information
         self.steam_api.fetch_avatar(summaries=summary)
-        username = self.steam_api.fetch_username(summaries=summary)
-        user_status = self.steam_api.fetch_user_status(summaries=summary)
-        last_logoff = self.steam_api.fetch_last_logoff(summaries=summary)
+        username_value = self.steam_api.fetch_username(summaries=summary)
+        user_status_value = self.steam_api.fetch_user_status(summaries=summary)
+        last_logoff_value = self.steam_api.fetch_last_logoff(summaries=summary)
+        if user_status_value == "Online":
+            last_logoff_value = "Now"
 
         # Static Widgets
         status_head = tk.Label(frame, text="Status")
         last_logoff_head = tk.Label(frame, text="Last Time Seen")
         separator1 = ttk.Separator(frame, orient="horizontal")
         avatar_head = tk.Label(frame, image=self.steam_api.avatar_list[0])
-        username = tk.Label(frame, text=username)
-        status = tk.Label(frame, text=user_status)
-        last_logoff = tk.Label(frame, text=last_logoff)
+        username = tk.Label(frame, text=username_value)
+        status = tk.Label(frame, text=user_status_value)
+        last_logoff = tk.Label(frame, text=last_logoff_value)
         separator2 = ttk.Separator(frame, orient="horizontal")
         playtime_2weeks_head = tk.Label(frame, text="Last 2 Weeks")
         playtime_forever_head = tk.Label(frame, text="Overall")
@@ -172,9 +175,9 @@ class ResponseWindow:
 
         # Grid Placement
         status_head.grid(row=0, column=2, padx=5, pady=5)
-        last_logoff_head.grid(row=0, column=3, padx=5, pady=5)
         separator1.grid(row=1, column=0, columnspan=4, sticky="WE")
         avatar_head.grid(row=2, column=0, padx=5, pady=10)
+        last_logoff_head.grid(row=0, column=3, padx=5, pady=5)
         username.grid(row=2, column=1, padx=5, pady=10, sticky="W")
         status.grid(row=2, column=2, padx=5, pady=10)
         last_logoff.grid(row=2, column=3, padx=5, pady=10)
