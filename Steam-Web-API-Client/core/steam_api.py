@@ -104,7 +104,7 @@ class SteamAPI:
             case _:
                 return ""
 
-    def fetch_last_logoff(self, summaries: dict) -> None:
+    def fetch_last_logoff(self, summaries: dict) -> str:
         """Filter, process and return the time the user last logged off
 
         Args:
