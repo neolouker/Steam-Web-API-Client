@@ -21,6 +21,7 @@ class SteamAPI:
 
     def __init__(self, api_key: str):
         self.api = WebAPI(key=api_key)
+        self.avatar_list = []
         self.image_list = []
         self.name_list = []
         self.playtime_2weeks_list = []
@@ -49,8 +50,8 @@ class SteamAPI:
         """
         return self.api.call("ISteamUser.GetPlayerSummaries", steamids=steamid, format="json")
 
-    def fetch_avatar(self, summaries: dict) -> ImageTk.PhotoImage:
-        """Filter, process and return the avatar of an user
+    def fetch_avatar(self, summaries: dict) -> None:
+        """Filter and process the avatar of an user
 
         Args:
             summaries (dict): data containing the fetched information about user
@@ -63,10 +64,10 @@ class SteamAPI:
             with urllib.request.urlopen(avatar_url, timeout=10) as image_data:
                 image_file = io.BytesIO(image_data.read())
             img = ImageTk.PhotoImage(Image.open(image_file))
-            return img
+            self.avatar_list.append(img)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
             print("Error fetching avatar:", e)
-            return None
+            self.avatar_list.append(None)
 
     def fetch_username(self, summaries: dict) -> str:
         """Filter and return username of user

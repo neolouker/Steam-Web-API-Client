@@ -1,13 +1,23 @@
-# user_interface.py
+"""Setup general window of client"""
 import tkinter as tk
+import webbrowser
+import os
 from tkinter import ttk
 from core.steam_api import SteamAPI
 from core.data_handler import DataHandler
-import webbrowser
-import os
 
 
 class UserInterface:
+    """Create user interface and place widgets
+
+    Attributes:
+        root = Tkinter root window
+        api_key = A tkinter string holding the value of the steam api key
+        steam_id = A tkinter string holding the value of the steam_id of an user
+        data_path = A string containing the path of the data.json file
+        icon_path = A string containing the path of the window icon
+    """
+
     def __init__(self):
         # Variables
         self.root = tk.Tk()
@@ -16,7 +26,7 @@ class UserInterface:
         self.steam_id = tk.StringVar()
         self.data_path = os.path.join(
             "Steam-Web-API-Client", "data", "data.json")
-        self.icon_path = os.path.join(
+        icon_path = os.path.join(
             "Steam-Web-API-Client", "assets", "icon.png")
 
         # Window Config
@@ -24,52 +34,68 @@ class UserInterface:
         tk.Grid.rowconfigure(self.root, 0, weight=1)
         tk.Grid.columnconfigure(self.root, 0, weight=1)
         tk.Grid.columnconfigure(self.root, 1, weight=1)
-        self.root.iconphoto(True, tk.PhotoImage(file=self.icon_path))
+        self.root.iconphoto(True, tk.PhotoImage(file=icon_path))
 
         # Read from data\data.json
-        self.data_handler = DataHandler(
-            data_path=self.data_path, api_key=self.api_key, steam_id=self.steam_id)
-        self.data = self.data_handler.read_data()
-        self.api_key.set(self.data[0])
-        self.steam_id.set(self.data[1])
+        data_handler = DataHandler(data_path=self.data_path,
+                                   api_key=self.api_key, steam_id=self.steam_id)
+        data = data_handler.read_data()
+        self.api_key.set(data[0])
+        self.steam_id.set(data[1])
 
         # Widgets
-        self.label1 = tk.Label(self.root, text="Web API Key")
-        self.label2 = tk.Label(self.root, text="Steam ID")
-        self.link1 = tk.Label(
-            self.root, text="(https://steamcommunity.com/dev/apikey)", foreground="blue", cursor="hand2")
-        self.link1.bind(
+        label1 = tk.Label(self.root, text="Web API Key")
+        label2 = tk.Label(self.root, text="Steam ID")
+        link1 = tk.Label(
+            self.root, text="(https://steamcommunity.com/dev/apikey)", foreground="blue",
+            cursor="hand2")
+        link1.bind(
             "<Button-1>", lambda event: self.open_browser("https://steamcommunity.com/dev/apikey"))
-        self.link2 = tk.Label(self.root, text="(https://steamid.io/)",
-                              foreground="blue", cursor="hand2")
-        self.link2.bind(
+        link2 = tk.Label(self.root, text="(https://steamid.io/)",
+                         foreground="blue", cursor="hand2")
+        link2.bind(
             "<Button-1>", lambda event: self.open_browser("https://steamid.io/"))
-        self.entry1 = ttk.Entry(
+        entry1 = ttk.Entry(
             self.root, textvariable=self.api_key, width=40, justify="center")
-        self.entry2 = ttk.Entry(
+        entry2 = ttk.Entry(
             self.root, textvariable=self.steam_id, width=40, justify="center")
-        self.button1 = ttk.Button(self.root, text="Enter", command=lambda: [
+        button1 = ttk.Button(self.root, text="Enter", command=lambda: [
             self.root.withdraw(), self.open_response_window()])
 
         # Grid Placement
-        self.label1.grid(row=0, column=0, padx=20, pady=(10, 0))
-        self.label2.grid(row=0, column=1, padx=20, pady=(10, 0))
-        self.link1.grid(row=1, column=0, padx=20, pady=(0, 10))
-        self.link2.grid(row=1, column=1, padx=20, pady=(0, 10))
-        self.entry1.grid(row=2, column=0, padx=20, pady=5, sticky="NSEW")
-        self.entry2.grid(row=2, column=1, padx=20, pady=5, sticky="NSEW")
-        self.button1.grid(row=3, column=0, columnspan=3,
-                          padx=20, pady=(25, 5), sticky="NSEW")
+        label1.grid(row=0, column=0, padx=20, pady=(10, 0))
+        label2.grid(row=0, column=1, padx=20, pady=(10, 0))
+        link1.grid(row=1, column=0, padx=20, pady=(0, 10))
+        link2.grid(row=1, column=1, padx=20, pady=(0, 10))
+        entry1.grid(row=2, column=0, padx=20, pady=5, sticky="NSEW")
+        entry2.grid(row=2, column=1, padx=20, pady=5, sticky="NSEW")
+        button1.grid(row=3, column=0, columnspan=3, padx=20, pady=(25, 5), sticky="NSEW")
 
-    def open_browser(self, url: str):
+    def open_browser(self, url: str) -> None:
+        """Opens a new tab in browser and follows link
+
+        Args:
+            url (str): A string holding the value of a link
+        """
         webbrowser.open_new(url)
 
-    def open_response_window(self):
-        response_window = ResponseWindow(
+    def open_response_window(self) -> None:
+        """Opens a window contring the response of the API"""
+        ResponseWindow(
             self.root, api_key=self.api_key, steam_id=self.steam_id, data_path=self.data_path)
 
 
 class ResponseWindow:
+    """Create user interface and place widgets of response window
+
+    Attributes:
+        root = root window
+        api_key = A tkinter string holding the value of the steam api key
+        steam_id = A tkinter string holding the value of the steam_id of an user
+        data_path = A string containing the path of the data.json file
+        response = A new toplevel window for response information
+    """
+
     def __init__(self, root, api_key: tk.StringVar, steam_id: tk.StringVar, data_path):
         # Window Instance
         self.root = root
@@ -79,47 +105,66 @@ class ResponseWindow:
         self.response = tk.Toplevel(self.root)
         self.response.title("Steam Web API")
         self.response.resizable(True, True)
-
+        self.steam_api = SteamAPI(api_key=self.api_key.get())
         # Create a canvas with the vertical scrollbar
         scrollbar = ttk.Scrollbar(self.response, orient="vertical")
         canvas = tk.Canvas(self.response, yscrollcommand=scrollbar.set)
+        # Create a frame inside the canvas to hold the widgets
+        frame = ttk.Frame(canvas)
+
         scrollbar.pack(side="right", fill="y")
         scrollbar.config(command=canvas.yview)
         canvas.pack(side="left", fill="both", expand=True)
 
-        # Create a frame inside the canvas to hold the widgets
-        frame = ttk.Frame(canvas)
         canvas.create_window((0, 0), window=frame, anchor="nw")
 
         # Data Handler
-        self.data_handler = DataHandler(
+        data_handler = DataHandler(
             data_path=self.data_path, api_key=self.api_key.get(), steam_id=self.steam_id.get())
-
-        # Save Input Data in data\data.json
-        self.data_handler.write_data()
+        data_handler.write_data()
 
         # Steam Web API
-        self.steam_api = SteamAPI(api_key=self.api_key.get())
         games = self.steam_api.get_recently_played_games(
             steamid=self.steam_id.get())
         summary = self.steam_api.get_player_summaries(
-            steamid=self.steam_id.get())
+            steamid=steam_id.get())
         amount_games = games["response"]["total_count"]
 
+        self.create_static_widgets(summary=summary, frame=frame)
+
+        self.create_dynamic_widgets(amount_games=amount_games, games=games, frame=frame)
+
+        self.config_canvas(canvas=canvas)
+
+        # Automatically adjust the window size based on the content
+        self.response.update_idletasks()
+        self.response.geometry(
+            f"{frame.winfo_reqwidth()}x{min(frame.winfo_reqheight(), 500)}")
+
+        # When the response window is closed, destroy the main window
+        self.response.protocol("WM_DELETE_WINDOW", self.on_response_close)
+
+    def create_static_widgets(self, summary: dict, frame: ttk.Frame) -> None:
+        """Create widgets showing user information
+
+        Args:
+            summary (dict): data containing the fetched information about user
+            frame (ttk.Frame): the area to place widgets onto
+        """
         # User Information
-        self.avatar = self.steam_api.fetch_avatar(summaries=summary)
-        self.username = self.steam_api.fetch_username(summaries=summary)
-        self.user_status = self.steam_api.fetch_user_status(summaries=summary)
-        self.last_logoff = self.steam_api.fetch_last_logoff(summaries=summary)
+        self.steam_api.fetch_avatar(summaries=summary)
+        username = self.steam_api.fetch_username(summaries=summary)
+        user_status = self.steam_api.fetch_user_status(summaries=summary)
+        last_logoff = self.steam_api.fetch_last_logoff(summaries=summary)
 
         # Static Widgets
         status_head = tk.Label(frame, text="Status")
         last_logoff_head = tk.Label(frame, text="Last Time Seen")
         separator1 = ttk.Separator(frame, orient="horizontal")
-        avatar = tk.Label(frame, image=self.avatar)
-        username = tk.Label(frame, text=self.username)
-        status = tk.Label(frame, text=self.user_status)
-        last_logoff = tk.Label(frame, text=self.last_logoff)
+        avatar_head = tk.Label(frame, image=self.steam_api.avatar_list[0])
+        username = tk.Label(frame, text=username)
+        status = tk.Label(frame, text=user_status)
+        last_logoff = tk.Label(frame, text=last_logoff)
         separator2 = ttk.Separator(frame, orient="horizontal")
         playtime_2weeks_head = tk.Label(frame, text="Last 2 Weeks")
         playtime_forever_head = tk.Label(frame, text="Overall")
@@ -129,7 +174,7 @@ class ResponseWindow:
         status_head.grid(row=0, column=2, padx=5, pady=5)
         last_logoff_head.grid(row=0, column=3, padx=5, pady=5)
         separator1.grid(row=1, column=0, columnspan=4, sticky="WE")
-        avatar.grid(row=2, column=0, padx=5, pady=10)
+        avatar_head.grid(row=2, column=0, padx=5, pady=10)
         username.grid(row=2, column=1, padx=5, pady=10, sticky="W")
         status.grid(row=2, column=2, padx=5, pady=10)
         last_logoff.grid(row=2, column=3, padx=5, pady=10)
@@ -138,6 +183,14 @@ class ResponseWindow:
         playtime_forever_head.grid(row=4, column=3, padx=5, sticky="WE")
         separator3.grid(row=5, column=0, columnspan=4, sticky="WE")
 
+    def create_dynamic_widgets(self, amount_games: int, games: dict, frame: ttk.Frame) -> None:
+        """Create widgets showing game information
+
+        Args:
+            amount_games (int): amount of games returned from API
+            games (dict): data containing the fetched information about games
+            frame (ttk.Frame): the area to place widgets onto
+        """
         for i in range(amount_games):
 
             # Playtime Information
@@ -162,6 +215,12 @@ class ResponseWindow:
             playtime_2weeks.grid(row=row_begin, column=2, padx=25, pady=5)
             playtime_forever.grid(row=row_begin, column=3, padx=30, pady=5)
 
+    def config_canvas(self, canvas: tk.Canvas) -> None:
+        """Adjust canvas options based on content
+
+        Args:
+            canvas (tk.Canvas): the area where the content frame is in
+        """
         # Update the scroll region whenever the canvas is updated
         canvas.update_idletasks()
         canvas.config(scrollregion=canvas.bbox("all"))
@@ -172,13 +231,6 @@ class ResponseWindow:
         canvas.bind_all("<MouseWheel>", lambda event: canvas.yview_scroll(
             int(-1 * (event.delta / 120)), "units"))
 
-        # Automatically adjust the window size based on the content
-        self.response.update_idletasks()
-        self.response.geometry(
-            f"{frame.winfo_reqwidth()}x{min(frame.winfo_reqheight(), 500)}")
-
-        # When the response window is closed, destroy the main window
-        self.response.protocol("WM_DELETE_WINDOW", self.on_response_close)
-
-    def on_response_close(self):
+    def on_response_close(self) -> None:
+        """When closing the response window also closing root window"""
         self.root.destroy()
