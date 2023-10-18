@@ -28,6 +28,7 @@ class UserInterface:
             "Steam-Web-API-Client", "data", "data.json")
         icon_path = os.path.join(
             "Steam-Web-API-Client", "assets", "icon.png")
+        self.current_id = tk.StringVar()
 
         # Window Config
         self.root.resizable(True, True)
@@ -37,11 +38,9 @@ class UserInterface:
         self.root.iconphoto(True, tk.PhotoImage(file=icon_path))
 
         # Read from data\data.json
-        data_handler = DataHandler(data_path=self.data_path,
-                                   api_key=self.api_key, steam_id=self.steam_id)
-        data = data_handler.read_data()
-        self.api_key.set(data[0])
-        self.steam_id.set(data[1])
+        self.data_handler = DataHandler(data_path=self.data_path)
+        api_key = self.data_handler.read_data()
+        self.api_key.set(api_key)
 
         # Widgets
         label1 = tk.Label(self.root, text="Web API Key")
@@ -59,6 +58,10 @@ class UserInterface:
             self.root, textvariable=self.api_key, width=40, justify="center")
         entry2 = ttk.Entry(
             self.root, textvariable=self.steam_id, width=40, justify="center")
+        combo = ttk.Combobox(self.root, values=self.data_handler.id_list,
+                             textvariable=self.current_id)
+        combo["state"] = "readonly"
+        combo.bind("<<ComboboxSelected>>", lambda event: self.combobox_changed())
         button1 = ttk.Button(self.root, text="Enter", command=lambda: [
             self.root.withdraw(), self.open_response_window()])
 
@@ -69,7 +72,8 @@ class UserInterface:
         link2.grid(row=1, column=1, padx=20, pady=(0, 10))
         entry1.grid(row=2, column=0, padx=20, pady=5, sticky="NSEW")
         entry2.grid(row=2, column=1, padx=20, pady=5, sticky="NSEW")
-        button1.grid(row=3, column=0, columnspan=3, padx=20, pady=(25, 5), sticky="NSEW")
+        combo.grid(row=3, column=1, padx=20, pady=5)
+        button1.grid(row=4, column=0, columnspan=3, padx=20, pady=(25, 5), sticky="NSEW")
 
     def open_browser(self, url: str) -> None:
         """Opens a new tab in browser and follows link
@@ -79,10 +83,15 @@ class UserInterface:
         """
         webbrowser.open_new(url)
 
+    def combobox_changed(self):
+        """ Handle the steam ID in combobox changed event """
+        if self.current_id.get() is not None:
+            self.steam_id.set(self.current_id.get())
+
     def open_response_window(self) -> None:
         """Opens a window contring the response of the API"""
         ResponseWindow(
-            self.root, api_key=self.api_key, steam_id=self.steam_id, data_path=self.data_path)
+            self.root, api_key=self.api_key, steam_id=self.steam_id, data_handler=self.data_handler)
 
 
 class ResponseWindow:
@@ -92,16 +101,15 @@ class ResponseWindow:
         root = root window
         api_key = A tkinter string holding the value of the steam api key
         steam_id = A tkinter string holding the value of the steam_id of an user
-        data_path = A string containing the path of the data.json file
+        data_handler = An existing object of the DataHandler class
         response = A new toplevel window for response information
     """
 
-    def __init__(self, root, api_key: tk.StringVar, steam_id: tk.StringVar, data_path):
+    def __init__(self, root, api_key: tk.StringVar, steam_id: tk.StringVar, data_handler):
         # Window Instance
         self.root = root
         self.api_key = api_key
         self.steam_id = steam_id
-        self.data_path = data_path
         self.response = tk.Toplevel(self.root)
         self.response.title("Steam Web API")
         self.response.resizable(True, True)
@@ -119,8 +127,12 @@ class ResponseWindow:
         canvas.create_window((0, 0), window=frame, anchor="nw")
 
         # Data Handler
-        data_handler = DataHandler(
-            data_path=self.data_path, api_key=self.api_key.get(), steam_id=self.steam_id.get())
+        data_handler.api_key = self.api_key.get()
+        if self.steam_id.get() not in data_handler.id_list:
+            if len(data_handler.id_list) >= 10:
+                data_handler.id_list[-1] = self.steam_id.get()
+            else:
+                data_handler.id_list.append(self.steam_id.get())
         data_handler.write_data()
 
         # Steam Web API

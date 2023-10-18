@@ -13,33 +13,34 @@ class DataHandler:
         input_data: A dictionary declaring the structure of the json file
     """
 
-    def __init__(self, data_path: str, api_key: str, steam_id: str):
+    def __init__(self, data_path: str, api_key: str = "", steam_id: str = ""):
         self.data_path = data_path
         self.api_key = api_key
         self.steam_id = steam_id
-        self.input_data = {"api_key": "", "steam_id": ""}
+        self.id_list = []
 
-    def read_data(self) -> list:
+    def read_data(self) -> str:
         """Reads api_key and steam_id from data.json
 
         Returns:
-            list: value of api_key and steam_id
+            str: value of api_key
         """
         try:
             with open(file=self.data_path, mode="r", encoding="utf-8") as json_file:
                 loaded_data = json.load(json_file)
                 self.api_key = loaded_data["api_key"]
-                self.steam_id = loaded_data["steam_id"]
+                self.id_list = list(loaded_data["steam_ids"])
             print(f"Loaded data from {self.data_path}")
         except (FileNotFoundError, json.JSONDecodeError):
             self.api_key = ""
-            self.steam_id = ""
+            self.id_list = []
             print(f"Couldn't read data from {self.data_path}")
-        return [self.api_key, self.steam_id]
+        return self.api_key
 
     def write_data(self) -> None:
         """Writes api_key and steam_id to data.json"""
-        self.input_data["api_key"] = self.api_key
-        self.input_data["steam_id"] = self.steam_id
+        input_data = {"api_key": "", "steam_ids": self.id_list}
+        input_data["api_key"] = self.api_key
         with open(file=self.data_path, mode="w", encoding="utf-8") as json_file:
-            json.dump(self.input_data, json_file)
+            json.dump(input_data, json_file)
+            print(f"Wrote data to {self.data_path}")
