@@ -13,10 +13,9 @@ class DataHandler:
         input_data: A dictionary declaring the structure of the json file
     """
 
-    def __init__(self, data_path: str, api_key: str = "", steam_id: str = ""):
+    def __init__(self, data_path: str, api_key: str = ""):
         self.data_path = data_path
         self.api_key = api_key
-        self.steam_id = steam_id
         self.id_list = []
 
     def read_data(self) -> str:
