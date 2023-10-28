@@ -24,6 +24,8 @@ class UserInterface:
         self.root.title("Steam Web API")
         self.api_key = tk.StringVar()
         self.steam_id = tk.StringVar()
+        self.api_key.trace("w", lambda *args: self.limitEntry())
+        self.steam_id.trace("w", lambda *args: self.limitEntry())
         self.data_path = os.path.join(
             "Steam-Web-API-Client", "data", "data.json")
         icon_path = os.path.join(
@@ -74,6 +76,12 @@ class UserInterface:
         entry2.grid(row=2, column=1, padx=20, pady=5, sticky="NSEW")
         combo.grid(row=3, column=1, padx=20, pady=5)
         button1.grid(row=4, column=0, columnspan=3, padx=20, pady=(25, 5), sticky="NSEW")
+    
+    def limitEntry(self):
+        api_value = self.api_key.get()
+        id_value = self.steam_id.get()
+        if len(api_value) > 32: self.api_key.set(api_value[:32])
+        if len(id_value) > 17: self.steam_id.set(id_value[:17])
 
     def open_browser(self, url: str) -> None:
         """Opens a new tab in browser and follows link
