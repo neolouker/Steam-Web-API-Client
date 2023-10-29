@@ -3,8 +3,8 @@ import tkinter as tk
 import webbrowser
 import os
 from tkinter import ttk
-from core.steam_api import SteamAPI
-from core.data_handler import DataHandler
+from steam_web_api_client.core.steam_api import SteamAPI
+from steam_web_api_client.core.data_handler import DataHandler
 
 
 class UserInterface:
@@ -27,9 +27,9 @@ class UserInterface:
         self.api_key.trace("w", lambda *args: self.limit_entry())
         self.steam_id.trace("w", lambda *args: self.limit_entry())
         self.data_path = os.path.join(
-            "Steam-Web-API-Client", "data", "data.json")
+            "steam_web_api_client", "data", "data.json")
         icon_path = os.path.join(
-            "Steam-Web-API-Client", "assets", "icon.png")
+            "steam_web_api_client", "assets", "icon.png")
         self.current_id = tk.StringVar()
 
         # Window Config
