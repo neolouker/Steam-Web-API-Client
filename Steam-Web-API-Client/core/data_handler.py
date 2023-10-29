@@ -1,7 +1,7 @@
 """File Handling for saving input values between executions."""
 
 import json
-
+import os
 
 class DataHandler:
     """Reading and writing to json file
@@ -34,6 +34,11 @@ class DataHandler:
             self.api_key = ""
             self.id_list = []
             print(f"Couldn't read data from {self.data_path}")
+            directory = os.path.dirname(self.data_path)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            with open(file=self.data_path, mode="w", encoding="utf-8"):
+                print(f"Created {self.data_path}")
         return self.api_key
 
     def write_data(self) -> None:
