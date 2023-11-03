@@ -2,6 +2,8 @@
 import tkinter as tk
 import webbrowser
 import os
+import sys
+import time
 from tkinter import ttk
 from steam_web_api_client.core.steam_api import SteamAPI
 from steam_web_api_client.core.data_handler import DataHandler
@@ -151,7 +153,12 @@ class ResponseWindow:
             steamid=self.steam_id.get())
         summary = self.steam_api.get_player_summaries(
             steamid=steam_id.get())
-        amount_games = games["response"]["total_count"]
+        try:
+            amount_games = games["response"]["total_count"]
+        except KeyError:
+            print("No access to this data! This profile is private")
+            time.sleep(3)
+            sys.exit()
 
         self.create_static_widgets(summary=summary, frame=frame)
 
