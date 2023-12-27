@@ -26,8 +26,8 @@ class UserInterface:
         self.root.title("Steam Web API")
         self.api_key = tk.StringVar()
         self.steam_id = tk.StringVar()
-        self.api_key.trace("w", lambda *args: self.limit_entry())
-        self.steam_id.trace("w", lambda *args: self.limit_entry())
+        self.api_key.trace_add("write", lambda *args: self.limit_entry())
+        self.steam_id.trace_add("write", lambda *args: self.limit_entry())
         self.data_path = os.path.join(
             "steam_web_api_client", "data", "data.json")
         icon_path = os.path.join(
@@ -153,12 +153,8 @@ class ResponseWindow:
             steamid=self.steam_id.get())
         summary = self.steam_api.get_player_summaries(
             steamid=steam_id.get())
-        try:
-            amount_games = games["response"]["total_count"]
-        except KeyError:
-            print("No access to this data! This profile is private")
-            time.sleep(3)
-            sys.exit()
+
+        amount_games = games["response"]["total_count"]
 
         self.create_static_widgets(summary=summary, frame=frame)
 

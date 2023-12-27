@@ -36,8 +36,21 @@ class SteamAPI:
         Returns:
             dict: data containing the fetched information
         """
-        return self.api.call(
-            "IPlayerService.GetRecentlyPlayedGames", steamid=steamid, count=50, format="json")
+        try:
+            response = self.api.call(
+                "IPlayerService.GetRecentlyPlayedGames", steamid=steamid, count=20, format="json")
+
+            # Check if the response has the expected structure
+            if 'response' in response and 'games' in response['response']:
+                return response
+            else:
+                raise Exception("Unexpected response structure")
+
+        except Exception as e:
+            # Handle general exceptions
+            print(f"An error occurred: {str(e)}")
+            print("No access to this data! This profile is private")
+            return None
 
     def get_player_summaries(self, steamid: int) -> dict:
         """Fetch and return summary of an user from API
