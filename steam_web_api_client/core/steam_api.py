@@ -38,7 +38,7 @@ class SteamAPI:
         """
         try:
             response = self.api.call(
-                "IPlayerService.GetRecentlyPlayedGames", steamid=steamid, count=20, format="json")
+                "IPlayerService.GetRecentlyPlayedGames", steamid=steamid, count=50, format="json")
 
             # Check if the response has the expected structure
             if 'response' in response and 'games' in response['response']:
