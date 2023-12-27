@@ -2,8 +2,6 @@
 import tkinter as tk
 import webbrowser
 import os
-import sys
-import time
 from tkinter import ttk
 from steam_web_api_client.core.steam_api import SteamAPI
 from steam_web_api_client.core.data_handler import DataHandler
@@ -153,6 +151,12 @@ class ResponseWindow:
             steamid=self.steam_id.get())
         summary = self.steam_api.get_player_summaries(
             steamid=steam_id.get())
+
+        # Error Handling
+        if games is None or summary is None:
+            self.root.destroy()
+            user_interface = UserInterface()
+            user_interface.root.mainloop()
 
         amount_games = games["response"]["total_count"]
 

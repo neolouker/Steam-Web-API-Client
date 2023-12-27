@@ -3,6 +3,7 @@ import urllib.request
 import urllib.error
 import io
 import datetime
+import requests
 from steam.webapi import WebAPI
 from PIL import ImageTk, Image
 
@@ -39,17 +40,12 @@ class SteamAPI:
         try:
             response = self.api.call(
                 "IPlayerService.GetRecentlyPlayedGames", steamid=steamid, count=50, format="json")
+            return response
 
-            # Check if the response has the expected structure
-            if 'response' in response and 'games' in response['response']:
-                return response
-            else:
-                raise Exception("Unexpected response structure")
-
-        except Exception as e:
-            # Handle general exceptions
-            print(f"An error occurred: {str(e)}")
-            print("No access to this data! This profile is private")
+        except requests.exceptions.HTTPError as http_err:
+            # Handle HTTP errors
+            print(f"HTTPError: {http_err}")
+            print("No access to this data! This profile is private!")
             return None
 
     def get_player_summaries(self, steamid: int) -> dict:
