@@ -57,7 +57,16 @@ class SteamAPI:
         Returns:
             dict: data containing the fetched information
         """
-        return self.api.call("ISteamUser.GetPlayerSummaries", steamids=steamid, format="json")
+        try:
+            response = self.api.call(
+                "ISteamUser.GetPlayerSummaries", steamids=steamid, format="json")
+            return response
+
+        except requests.exceptions.HTTPError as http_err:
+            # Handle HTTP errors
+            print(f"HTTPError: {http_err}")
+            print("No access to this data! This profile is private!")
+            return None
 
     def fetch_avatar(self, summaries: dict) -> None:
         """Filter and process the avatar of an user
