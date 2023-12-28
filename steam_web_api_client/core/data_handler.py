@@ -41,10 +41,10 @@ class DataHandler:
                 print(f"Created {self.data_path}")
         return self.api_key
 
-    def write_data(self) -> None:
+    def save_data(self) -> None:
         """Writes api_key and steam_id to data.json"""
         input_data = {"api_key": "", "steam_ids": self.id_list}
         input_data["api_key"] = self.api_key
         with open(file=self.data_path, mode="w", encoding="utf-8") as json_file:
             json.dump(input_data, json_file)
-            print(f"Wrote data to {self.data_path}")
+            print(f"Saved data to {self.data_path}")

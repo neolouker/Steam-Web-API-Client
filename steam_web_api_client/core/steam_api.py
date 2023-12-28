@@ -46,7 +46,7 @@ class SteamAPI:
         except requests.exceptions.HTTPError as http_err:
             # Handle HTTP errors
             print(f"HTTPError: {http_err}")
-            print("No access to this data! This profile is private!")
+            print("No access to this data! The profile may be private!")
             return None
 
     def get_player_summaries(self, steamid: int) -> dict:
@@ -66,7 +66,7 @@ class SteamAPI:
         except requests.exceptions.HTTPError as http_err:
             # Handle HTTP errors
             print(f"HTTPError: {http_err}")
-            print("No access to this data! This profile is private!")
+            print("No access to this data! The profile may be private!")
             return None
 
     def fetch_avatar(self, summaries: dict) -> None:

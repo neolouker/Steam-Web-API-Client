@@ -153,7 +153,7 @@ class ResponseWindow:
             user_interface.root.mainloop()
             return
 
-        data_handler.write_data()
+        data_handler.save_data()
 
         amount_games = games["response"]["total_count"]
 
