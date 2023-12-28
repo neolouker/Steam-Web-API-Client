@@ -134,6 +134,7 @@ class ResponseWindow:
         scrollbar.pack(side="right", fill="y")
         scrollbar.config(command=canvas.yview)
         canvas.pack(side="left", fill="both", expand=True)
+        canvas.config(yscrollcommand=scrollbar.set, width=300)
 
         canvas.create_window((0, 0), window=frame, anchor="nw")
 
