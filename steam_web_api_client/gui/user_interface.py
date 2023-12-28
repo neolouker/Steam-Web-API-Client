@@ -141,6 +141,7 @@ class ResponseWindow:
         # Error Handling
         if games is None or summary is None:
             self.root.destroy()
+            print("Response Window has been closed!")
             user_interface = UserInterface()
             user_interface.root.mainloop()
             return
