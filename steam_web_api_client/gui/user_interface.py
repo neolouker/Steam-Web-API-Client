@@ -132,14 +132,6 @@ class ResponseWindow:
         # Create a frame inside the canvas to hold the widgets
         frame = ttk.Frame(canvas)
 
-        # Data Handler
-        data_handler.api_key = self.api_key.get()
-        if self.steam_id.get() not in data_handler.id_list:
-            if len(data_handler.id_list) >= 10:
-                data_handler.id_list[-1] = self.steam_id.get()
-            else:
-                data_handler.id_list.append(self.steam_id.get())
-
         # Steam Web API
         games = self.steam_api.get_recently_played_games(
             steamid=self.steam_id.get())
@@ -153,7 +145,15 @@ class ResponseWindow:
             user_interface.root.mainloop()
             return
 
-        data_handler.save_data()
+        # Data Handler
+        data_handler.api_key = self.api_key.get()
+        if self.steam_id.get() not in data_handler.id_list:
+            if len(data_handler.id_list) >= 10:
+                data_handler.id_list[-1] = self.steam_id.get()
+            else:
+                data_handler.id_list.append(self.steam_id.get())
+
+            data_handler.save_data()
 
         amount_games = games["response"]["total_count"]
 
