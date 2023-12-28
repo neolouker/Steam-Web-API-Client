@@ -132,13 +132,6 @@ class ResponseWindow:
         # Create a frame inside the canvas to hold the widgets
         frame = ttk.Frame(canvas)
 
-        scrollbar.pack(side="right", fill="y")
-        scrollbar.config(command=canvas.yview)
-        canvas.pack(side="left", fill="both", expand=True)
-        canvas.config(yscrollcommand=scrollbar.set, width=300)
-
-        canvas.create_window((0, 0), window=frame, anchor="nw")
-
         # Data Handler
         data_handler.api_key = self.api_key.get()
         if self.steam_id.get() not in data_handler.id_list:
@@ -167,7 +160,7 @@ class ResponseWindow:
 
         self.create_dynamic_widgets(amount_games=amount_games, games=games, frame=frame)
 
-        self.config_canvas(canvas=canvas)
+        self.config_canvas(canvas=canvas, scrollbar=scrollbar, frame=frame)
 
         # Automatically adjust the window size based on the content
         self.response.update_idletasks()
@@ -251,19 +244,26 @@ class ResponseWindow:
             playtime_2weeks.grid(row=row_begin, column=2, padx=25, pady=5, sticky="E")
             playtime_forever.grid(row=row_begin, column=3, padx=30, pady=5, sticky="E")
 
-    def config_canvas(self, canvas: tk.Canvas) -> None:
+    def config_canvas(self, canvas: tk.Canvas, scrollbar: tk.Scrollbar, frame: tk.Frame) -> None:
         """Adjust canvas options based on content
 
         Args:
             canvas (tk.Canvas): the area where the content frame is in
         """
+        scrollbar.pack(side="right", fill="y")
+        scrollbar.config(command=canvas.yview)
+        canvas.config(yscrollcommand=scrollbar.set, width=550)
+        canvas.pack(side="left", fill="both", expand=True, padx=(0, 5))
+
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+
         # Update the scroll region whenever the canvas is updated
         canvas.update_idletasks()
         canvas.config(scrollregion=canvas.bbox("all"))
 
         # Bind the canvas scrolling to the scrollbar
         # Automatically adjust the canvas width based on the content
-        canvas.bind("<Configure>", lambda e: canvas.config(width=e.width))
+        canvas.bind("<Configure>", lambda e: canvas.config(width=canvas.winfo_width()))
         canvas.bind_all("<MouseWheel>", lambda event: canvas.yview_scroll(
             int(-1 * (event.delta / 120)), "units"))
 
