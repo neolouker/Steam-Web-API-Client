@@ -100,7 +100,7 @@ class UserInterface:
             self.steam_id.set(self.current_id.get())
 
     def open_response_window(self) -> None:
-        """Opens a window contring the response of the API"""
+        """Opens a window containing the response of the API"""
         ResponseWindow(
             self.root, api_key=self.api_key, steam_id=self.steam_id, data_handler=self.data_handler)
 
