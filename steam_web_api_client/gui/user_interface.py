@@ -139,7 +139,6 @@ class ResponseWindow:
                 data_handler.id_list[-1] = self.steam_id.get()
             else:
                 data_handler.id_list.append(self.steam_id.get())
-        data_handler.write_data()
 
         # Steam Web API
         games = self.steam_api.get_recently_played_games(
@@ -153,6 +152,8 @@ class ResponseWindow:
             user_interface = UserInterface()
             user_interface.root.mainloop()
             return
+
+        data_handler.write_data()
 
         amount_games = games["response"]["total_count"]
 
