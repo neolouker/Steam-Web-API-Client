@@ -1,10 +1,11 @@
 """Setup general window of client"""
+import os
 import tkinter as tk
 import webbrowser
-import os
 from tkinter import ttk
-from steam_web_api_client.core.steam_api import SteamAPI
+
 from steam_web_api_client.core.data_handler import DataHandler
+from steam_web_api_client.core.steam_api import SteamAPI
 
 
 class UserInterface:

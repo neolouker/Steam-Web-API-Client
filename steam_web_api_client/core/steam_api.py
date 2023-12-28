@@ -1,11 +1,12 @@
 """Fetch and save information from Steam Web API"""
-import urllib.request
-import urllib.error
-import io
 import datetime
+import io
+import urllib.error
+import urllib.request
+
 import requests
+from PIL import Image, ImageTk
 from steam.webapi import WebAPI
-from PIL import ImageTk, Image
 
 
 class SteamAPI:
