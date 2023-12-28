@@ -157,6 +157,7 @@ class ResponseWindow:
             self.root.destroy()
             user_interface = UserInterface()
             user_interface.root.mainloop()
+            return
 
         amount_games = games["response"]["total_count"]
 
