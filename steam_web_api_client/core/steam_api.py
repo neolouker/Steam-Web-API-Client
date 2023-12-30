@@ -40,7 +40,11 @@ class SteamAPI:
         """
         try:
             response = self.api.call(
-                "IPlayerService.GetRecentlyPlayedGames", steamid=steamid, count=50, format="json")
+                "IPlayerService.GetRecentlyPlayedGames",
+                steamid=steamid,
+                count=50,
+                format="json",
+            )
             return response
 
         except requests.exceptions.HTTPError as http_err:
@@ -60,7 +64,8 @@ class SteamAPI:
         """
         try:
             response = self.api.call(
-                "ISteamUser.GetPlayerSummaries", steamids=steamid, format="json")
+                "ISteamUser.GetPlayerSummaries", steamids=steamid, format="json"
+            )
             return response
 
         except requests.exceptions.HTTPError as http_err:
@@ -146,8 +151,10 @@ class SteamAPI:
         """
         app_id = games["response"]["games"][iteration]["appid"]
         icon_hash = games["response"]["games"][iteration]["img_icon_url"]
-        icon_url = (f"http://media.steampowered.com/steamcommunity/"
-                    f"public/images/apps/{app_id}/{icon_hash}.jpg")
+        icon_url = (
+            f"http://media.steampowered.com/steamcommunity/"
+            f"public/images/apps/{app_id}/{icon_hash}.jpg"
+        )
         try:
             with urllib.request.urlopen(icon_url, timeout=10) as image_data:
                 image_file = io.BytesIO(image_data.read())

@@ -3,6 +3,7 @@
 import json
 import os
 
+
 class DataHandler:
     """Reading and writing to json file
 

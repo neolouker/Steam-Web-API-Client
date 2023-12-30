@@ -27,10 +27,8 @@ class UserInterface:
         self.steam_id = tk.StringVar()
         self.api_key.trace_add("write", lambda *args: self.limit_entry())
         self.steam_id.trace_add("write", lambda *args: self.limit_entry())
-        self.data_path = os.path.join(
-            "steam_web_api_client", "data", "data.json")
-        icon_path = os.path.join(
-            "steam_web_api_client", "assets", "icon.png")
+        self.data_path = os.path.join("steam_web_api_client", "data", "data.json")
+        icon_path = os.path.join("steam_web_api_client", "assets", "icon.png")
         self.current_id = tk.StringVar()
 
         # Window Config
@@ -49,24 +47,35 @@ class UserInterface:
         label1 = tk.Label(self.root, text="Web API Key")
         label2 = tk.Label(self.root, text="Steam ID")
         link1 = tk.Label(
-            self.root, text="(https://steamcommunity.com/dev/apikey)", foreground="blue",
-            cursor="hand2")
+            self.root,
+            text="(https://steamcommunity.com/dev/apikey)",
+            foreground="blue",
+            cursor="hand2",
+        )
         link1.bind(
-            "<Button-1>", lambda event: self.open_browser("https://steamcommunity.com/dev/apikey"))
-        link2 = tk.Label(self.root, text="(https://steamid.io/)",
-                         foreground="blue", cursor="hand2")
-        link2.bind(
-            "<Button-1>", lambda event: self.open_browser("https://steamid.io/"))
+            "<Button-1>",
+            lambda event: self.open_browser("https://steamcommunity.com/dev/apikey"),
+        )
+        link2 = tk.Label(
+            self.root, text="(https://steamid.io/)", foreground="blue", cursor="hand2"
+        )
+        link2.bind("<Button-1>", lambda event: self.open_browser("https://steamid.io/"))
         entry1 = ttk.Entry(
-            self.root, textvariable=self.api_key, width=40, justify="center")
+            self.root, textvariable=self.api_key, width=40, justify="center"
+        )
         entry2 = ttk.Entry(
-            self.root, textvariable=self.steam_id, width=40, justify="center")
-        combo = ttk.Combobox(self.root, values=self.data_handler.id_list,
-                             textvariable=self.current_id)
+            self.root, textvariable=self.steam_id, width=40, justify="center"
+        )
+        combo = ttk.Combobox(
+            self.root, values=self.data_handler.id_list, textvariable=self.current_id
+        )
         combo["state"] = "readonly"
         combo.bind("<<ComboboxSelected>>", lambda event: self.combobox_changed())
-        button1 = ttk.Button(self.root, text="Enter", command=lambda: [
-            self.root.withdraw(), self.open_response_window()])
+        button1 = ttk.Button(
+            self.root,
+            text="Enter",
+            command=lambda: [self.root.withdraw(), self.open_response_window()],
+        )
 
         # Grid Placement
         label1.grid(row=0, column=0, padx=20, pady=(10, 0))
@@ -76,7 +85,9 @@ class UserInterface:
         entry1.grid(row=2, column=0, padx=20, pady=5, sticky="NSEW")
         entry2.grid(row=2, column=1, padx=20, pady=5, sticky="NSEW")
         combo.grid(row=3, column=1, padx=20, pady=5)
-        button1.grid(row=4, column=0, columnspan=3, padx=20, pady=(25, 5), sticky="NSEW")
+        button1.grid(
+            row=4, column=0, columnspan=3, padx=20, pady=(25, 5), sticky="NSEW"
+        )
 
     def limit_entry(self):
         """Limit maximum characters in entries"""
@@ -96,14 +107,18 @@ class UserInterface:
         webbrowser.open_new(url)
 
     def combobox_changed(self):
-        """ Handle the steam ID in combobox changed event """
+        """Handle the steam ID in combobox changed event"""
         if self.current_id.get() is not None:
             self.steam_id.set(self.current_id.get())
 
     def open_response_window(self) -> None:
         """Opens a window containing the response of the API"""
         ResponseWindow(
-            self.root, api_key=self.api_key, steam_id=self.steam_id, data_handler=self.data_handler)
+            self.root,
+            api_key=self.api_key,
+            steam_id=self.steam_id,
+            data_handler=self.data_handler,
+        )
 
 
 class ResponseWindow:
@@ -117,7 +132,9 @@ class ResponseWindow:
         response = A new toplevel window for response information
     """
 
-    def __init__(self, root, api_key: tk.StringVar, steam_id: tk.StringVar, data_handler):
+    def __init__(
+        self, root, api_key: tk.StringVar, steam_id: tk.StringVar, data_handler
+    ):
         # Window Instance
         self.root = root
         self.api_key = api_key
@@ -133,10 +150,8 @@ class ResponseWindow:
         frame = ttk.Frame(canvas)
 
         # Steam Web API
-        games = self.steam_api.get_recently_played_games(
-            steamid=self.steam_id.get())
-        summary = self.steam_api.get_player_summaries(
-            steamid=steam_id.get())
+        games = self.steam_api.get_recently_played_games(steamid=self.steam_id.get())
+        summary = self.steam_api.get_player_summaries(steamid=steam_id.get())
 
         # Error Handling
         if games is None or summary is None:
@@ -167,7 +182,8 @@ class ResponseWindow:
         # Automatically adjust the window size based on the content
         self.response.update_idletasks()
         self.response.geometry(
-            f"{frame.winfo_reqwidth()}x{min(frame.winfo_reqheight(), 500)}")
+            f"{frame.winfo_reqwidth()}x{min(frame.winfo_reqheight(), 500)}"
+        )
 
         # When the response window is closed, destroy the main window
         self.response.protocol("WM_DELETE_WINDOW", self.on_response_close)
@@ -214,7 +230,9 @@ class ResponseWindow:
         playtime_forever_head.grid(row=4, column=3, padx=5, sticky="WE")
         separator3.grid(row=5, column=0, columnspan=4, sticky="WE")
 
-    def create_dynamic_widgets(self, amount_games: int, games: dict, frame: ttk.Frame) -> None:
+    def create_dynamic_widgets(
+        self, amount_games: int, games: dict, frame: ttk.Frame
+    ) -> None:
         """Create widgets showing game information
 
         Args:
@@ -223,7 +241,6 @@ class ResponseWindow:
             frame (ttk.Frame): the area to place widgets onto
         """
         for i in range(amount_games):
-
             # Playtime Information
             self.steam_api.fetch_icons(games=games, iteration=i)
             self.steam_api.fetch_names(games=games, iteration=i)
@@ -234,19 +251,22 @@ class ResponseWindow:
             icon = tk.Label(frame, image=self.steam_api.image_list[i])
             title = tk.Label(frame, text=self.steam_api.name_list[i])
             playtime_2weeks = tk.Label(
-                frame, text=self.steam_api.playtime_2weeks_list[i])
+                frame, text=self.steam_api.playtime_2weeks_list[i]
+            )
             playtime_forever = tk.Label(
-                frame, text=self.steam_api.playtime_forever_list[i])
+                frame, text=self.steam_api.playtime_forever_list[i]
+            )
 
             # Grid Placement
             row_begin = i + 6
             icon.grid(row=row_begin, column=0, padx=5, pady=5)
-            title.grid(row=row_begin, column=1,
-                       padx=(5, 30), pady=5, sticky="W")
+            title.grid(row=row_begin, column=1, padx=(5, 30), pady=5, sticky="W")
             playtime_2weeks.grid(row=row_begin, column=2, padx=25, pady=5, sticky="E")
             playtime_forever.grid(row=row_begin, column=3, padx=30, pady=5, sticky="E")
 
-    def config_canvas(self, canvas: tk.Canvas, scrollbar: tk.Scrollbar, frame: tk.Frame) -> None:
+    def config_canvas(
+        self, canvas: tk.Canvas, scrollbar: tk.Scrollbar, frame: tk.Frame
+    ) -> None:
         """Adjust canvas options based on content
 
         Args:
@@ -266,8 +286,10 @@ class ResponseWindow:
         # Bind the canvas scrolling to the scrollbar
         # Automatically adjust the canvas width based on the content
         canvas.bind("<Configure>", lambda e: canvas.config(width=canvas.winfo_width()))
-        canvas.bind_all("<MouseWheel>", lambda event: canvas.yview_scroll(
-            int(-1 * (event.delta / 120)), "units"))
+        canvas.bind_all(
+            "<MouseWheel>",
+            lambda event: canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"),
+        )
 
     def on_response_close(self) -> None:
         """When closing the response window also closing root window"""
