@@ -9,9 +9,7 @@ from steam_web_api_client.gui.user_interface import UserInterface
 
 
 def main():
-    """
-    Initializes the user interface.
-    """
+    """Initializes the user interface."""
     user_interface = UserInterface()
     user_interface.root.mainloop()
 

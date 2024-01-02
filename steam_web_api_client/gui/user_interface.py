@@ -9,7 +9,7 @@ from steam_web_api_client.core.steam_api import SteamAPI
 
 
 class UserInterface:
-    """Create user interface and place widgets
+    """Create and manage the main user interface.
 
     Attributes:
         root = Tkinter root window
@@ -20,7 +20,7 @@ class UserInterface:
     """
 
     def __init__(self):
-        # Variables
+        # Initialize main window and variables
         self.root = tk.Tk()
         self.root.title("Steam Web API")
         self.api_key = tk.StringVar()
@@ -90,7 +90,7 @@ class UserInterface:
         )
 
     def limit_entry(self):
-        """Limit maximum characters in entries"""
+        """Limit maximum characters in entries."""
         api_value = self.api_key.get()
         id_value = self.steam_id.get()
         if len(api_value) > 32:
@@ -99,7 +99,7 @@ class UserInterface:
             self.steam_id.set(id_value[:17])
 
     def open_browser(self, url: str) -> None:
-        """Opens a new tab in browser and follows link
+        """Opens a new tab in browser and follows link.
 
         Args:
             url (str): A string holding the value of a link
@@ -107,12 +107,12 @@ class UserInterface:
         webbrowser.open_new(url)
 
     def combobox_changed(self):
-        """Handle the steam ID in combobox changed event"""
+        """Handle the steam ID in combobox changed event."""
         if self.current_id.get() is not None:
             self.steam_id.set(self.current_id.get())
 
     def open_response_window(self) -> None:
-        """Opens a window containing the response of the API"""
+        """Opens a window containing the response of the API."""
         ResponseWindow(
             self.root,
             api_key=self.api_key,
@@ -122,7 +122,7 @@ class UserInterface:
 
 
 class ResponseWindow:
-    """Create user interface and place widgets of response window
+    """Create and manage the response window showing Steam API information.
 
     Attributes:
         root = root window
@@ -135,7 +135,7 @@ class ResponseWindow:
     def __init__(
         self, root, api_key: tk.StringVar, steam_id: tk.StringVar, data_handler
     ):
-        # Window Instance
+        # Initialize response window and variables
         self.root = root
         self.api_key = api_key
         self.steam_id = steam_id
@@ -173,10 +173,13 @@ class ResponseWindow:
 
         amount_games = games["response"]["total_count"]
 
+        # Create and place static widgets
         self.create_static_widgets(summary=summary, frame=frame)
 
+        # Create and place dynamic widgets
         self.create_dynamic_widgets(amount_games=amount_games, games=games, frame=frame)
 
+        # Configure canvas
         self.config_canvas(canvas=canvas, scrollbar=scrollbar, frame=frame)
 
         # Automatically adjust the window size based on the content
@@ -190,7 +193,7 @@ class ResponseWindow:
 
     def create_static_widgets(self, summary: dict, frame: ttk.Frame) -> None:
         # pylint: disable=too-many-locals
-        """Create widgets showing user information
+        """Create widgets showing user information.
 
         Args:
             summary (dict): data containing the fetched information about user
@@ -233,7 +236,7 @@ class ResponseWindow:
     def create_dynamic_widgets(
         self, amount_games: int, games: dict, frame: ttk.Frame
     ) -> None:
-        """Create widgets showing game information
+        """Create widgets showing game information.
 
         Args:
             amount_games (int): amount of games returned from API
@@ -267,7 +270,7 @@ class ResponseWindow:
     def config_canvas(
         self, canvas: tk.Canvas, scrollbar: tk.Scrollbar, frame: tk.Frame
     ) -> None:
-        """Adjust canvas options based on content
+        """Adjust canvas options based on content.
 
         Args:
             canvas (tk.Canvas): the area where the content frame is in
@@ -292,5 +295,5 @@ class ResponseWindow:
         )
 
     def on_response_close(self) -> None:
-        """When closing the response window also closing root window"""
+        """When closing the response window also closing root window."""
         self.root.destroy()

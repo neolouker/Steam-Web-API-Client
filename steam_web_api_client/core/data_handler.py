@@ -5,7 +5,7 @@ import os
 
 
 class DataHandler:
-    """Reading and writing to json file
+    """Read and write to json file.
 
     Attributes:
         data_path: A string containing the path of a json file
@@ -20,7 +20,7 @@ class DataHandler:
         self.id_list = []
 
     def read_data(self) -> str:
-        """Reads api_key and steam_id from data.json
+        """Reads api_key and steam_id from data.json.
 
         Returns:
             str: value of api_key
@@ -43,7 +43,7 @@ class DataHandler:
         return self.api_key
 
     def save_data(self) -> None:
-        """Writes api_key and steam_id to data.json"""
+        """Writes api_key and steam_id to data.json."""
         input_data = {"api_key": "", "steam_ids": self.id_list}
         input_data["api_key"] = self.api_key
         with open(file=self.data_path, mode="w", encoding="utf-8") as json_file:

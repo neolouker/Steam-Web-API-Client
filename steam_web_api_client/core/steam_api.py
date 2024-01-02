@@ -10,7 +10,7 @@ from steam.webapi import WebAPI
 
 
 class SteamAPI:
-    """Save, process and return information from Steam Web API
+    """Save, process and return information from Steam Web API.
 
     Attributes:
         api_key = A string holding the value of the steam api key
@@ -30,7 +30,7 @@ class SteamAPI:
         self.playtime_forever_list = []
 
     def get_recently_played_games(self, steamid: int) -> dict:
-        """Fetch and return recently played games from API
+        """Fetch and return recently played games from API.
 
         Args:
             steamid (int): steam ID of user to fetch information
@@ -54,7 +54,7 @@ class SteamAPI:
             return None
 
     def get_player_summaries(self, steamid: int) -> dict:
-        """Fetch and return summary of an user from API
+        """Fetch and return summary of an user from API.
 
         Args:
             steamid (int): steam ID of user to fetch information
@@ -75,7 +75,7 @@ class SteamAPI:
             return None
 
     def fetch_avatar(self, summaries: dict) -> None:
-        """Filter and process the avatar of an user
+        """Filter and process the avatar of an user.
 
         Args:
             summaries (dict): data containing the fetched information about user
@@ -94,7 +94,7 @@ class SteamAPI:
             self.avatar_list.append(None)
 
     def fetch_username(self, summaries: dict) -> str:
-        """Filter and return username of user
+        """Filter and return username of user.
 
         Args:
             summaries (dict): data containing the fetched information about user
@@ -105,7 +105,7 @@ class SteamAPI:
         return summaries["response"]["players"][0]["personaname"]
 
     def fetch_user_status(self, summaries: dict) -> str:
-        """Filter, process and return status of user
+        """Filter, process and return status of user.
 
         Args:
             summaries (dict): data containing the fetched information about user
@@ -129,7 +129,7 @@ class SteamAPI:
                 return ""
 
     def fetch_last_logoff(self, summaries: dict) -> str:
-        """Filter, process and return the time the user last logged off
+        """Filter, process and return the time the user last logged off.
 
         Args:
             summaries (dict): data containing the fetched information about user
@@ -143,7 +143,7 @@ class SteamAPI:
         return time_formatted
 
     def fetch_icons(self, games: dict, iteration: int) -> None:
-        """Fetch, process and save the game icons
+        """Fetch, process and save the game icons.
 
         Args:
             games (dict): data containing the fetched information about games
@@ -167,7 +167,7 @@ class SteamAPI:
             self.image_list.append(None)
 
     def fetch_names(self, games: dict, iteration: int):
-        """Fetch and save game titles
+        """Fetch and save game titles.
 
         Args:
             games (dict): data containing the fetched information about games
@@ -177,7 +177,7 @@ class SteamAPI:
         self.name_list.append(game_name)
 
     def fetch_playtime_2weeks(self, games: dict, iteration: int):
-        """Fetch and save the played time in last two weeks per game
+        """Fetch and save the played time in last two weeks per game.
 
         Args:
             games (dict): data containing the fetched information about games
@@ -191,7 +191,7 @@ class SteamAPI:
         self.playtime_2weeks_list.append(playtime_2weeks)
 
     def fetch_playtime_forever(self, games: dict, iteration: int):
-        """Fetch and save the overall played time per game
+        """Fetch and save the overall played time per game.
 
         Args:
             games (dict): data containing the fetched information about games
