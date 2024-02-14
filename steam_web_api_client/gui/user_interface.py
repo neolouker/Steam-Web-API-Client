@@ -46,8 +46,18 @@ class UserInterface:
         self.api_key.set(api_key)
 
         # Widgets
-        label1 = tk.Label(self.root, text="Web API Key", background="white")
-        label2 = tk.Label(self.root, text="Steam ID", background="white")
+        label1 = tk.Label(
+            self.root,
+            text="Web API Key",
+            background="white",
+            font=("Helvetica", 9, "bold"),
+        )
+        label2 = tk.Label(
+            self.root,
+            text="Steam ID",
+            background="white",
+            font=("Helvetica", 9, "bold"),
+        )
         link1 = tk.Label(
             self.root,
             text="(https://steamcommunity.com/dev/apikey)",
@@ -217,29 +227,35 @@ class ResponseWindow:
             last_logoff_value = "Now"
 
         # Static Widgets
-        status_head = tk.Label(frame, text="Status")
-        last_logoff_head = tk.Label(frame, text="Last Time Seen")
+        status_head = tk.Label(frame, text="Status", font=("Helvetica", 9, "bold"))
+        last_logoff_head = tk.Label(
+            frame, text="Last Time Seen", font=("Helvetica", 9, "bold")
+        )
         separator1 = ttk.Separator(frame, orient="horizontal")
         avatar_head = tk.Label(frame, image=self.steam_api.avatar_list[0])
         username = tk.Label(frame, text=username_value)
         status = tk.Label(frame, text=user_status_value)
         last_logoff = tk.Label(frame, text=last_logoff_value)
         separator2 = ttk.Separator(frame, orient="horizontal")
-        playtime_2weeks_head = tk.Label(frame, text="Last 2 Weeks")
-        playtime_forever_head = tk.Label(frame, text="Overall")
+        playtime_2weeks_head = tk.Label(
+            frame, text="Last 2 Weeks", font=("Helvetica", 9, "bold")
+        )
+        playtime_forever_head = tk.Label(
+            frame, text="Overall", font=("Helvetica", 9, "bold")
+        )
         separator3 = ttk.Separator(frame, orient="horizontal")
 
         # Grid Placement
         status_head.grid(row=0, column=2, padx=5, pady=5)
         separator1.grid(row=1, column=0, columnspan=4, sticky="WE")
         avatar_head.grid(row=2, column=0, padx=5, pady=10)
-        last_logoff_head.grid(row=0, column=3, padx=5, pady=5)
+        last_logoff_head.grid(row=0, column=3, padx=25, pady=5)
         username.grid(row=2, column=1, padx=5, pady=10, sticky="W")
         status.grid(row=2, column=2, padx=5, pady=10)
         last_logoff.grid(row=2, column=3, padx=5, pady=10)
         separator2.grid(row=3, column=0, columnspan=4, sticky="WE")
-        playtime_2weeks_head.grid(row=4, column=2, padx=5, sticky="WE")
-        playtime_forever_head.grid(row=4, column=3, padx=5, sticky="WE")
+        playtime_2weeks_head.grid(row=4, column=2, padx=25, sticky="WE")
+        playtime_forever_head.grid(row=4, column=3, padx=25, sticky="WE")
         separator3.grid(row=5, column=0, columnspan=4, sticky="WE")
 
     def create_dynamic_widgets(
@@ -273,8 +289,8 @@ class ResponseWindow:
             row_begin = i + 6
             icon.grid(row=row_begin, column=0, padx=5, pady=5)
             title.grid(row=row_begin, column=1, padx=(5, 30), pady=5, sticky="W")
-            playtime_2weeks.grid(row=row_begin, column=2, padx=25, pady=5, sticky="E")
-            playtime_forever.grid(row=row_begin, column=3, padx=30, pady=5, sticky="E")
+            playtime_2weeks.grid(row=row_begin, column=2, padx=45, pady=5, sticky="E")
+            playtime_forever.grid(row=row_begin, column=3, padx=45, pady=5, sticky="E")
 
     def config_canvas(
         self, canvas: tk.Canvas, scrollbar: tk.Scrollbar, frame: tk.Frame
@@ -286,7 +302,7 @@ class ResponseWindow:
         """
         scrollbar.pack(side="right", fill="y")
         scrollbar.config(command=canvas.yview)
-        canvas.config(yscrollcommand=scrollbar.set, width=550)
+        canvas.config(yscrollcommand=scrollbar.set)
         canvas.pack(side="left", fill="both", expand=True, padx=(0, 5))
 
         canvas.create_window((0, 0), window=frame, anchor="nw")
