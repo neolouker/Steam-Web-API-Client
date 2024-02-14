@@ -1,4 +1,5 @@
 """Setup general window of client"""
+
 import os
 import tkinter as tk
 import webbrowser
@@ -33,6 +34,7 @@ class UserInterface:
 
         # Window Config
         self.root.resizable(True, True)
+        self.root.configure(background="white")
         tk.Grid.rowconfigure(self.root, 0, weight=1)
         tk.Grid.columnconfigure(self.root, 0, weight=1)
         tk.Grid.columnconfigure(self.root, 1, weight=1)
@@ -44,11 +46,12 @@ class UserInterface:
         self.api_key.set(api_key)
 
         # Widgets
-        label1 = tk.Label(self.root, text="Web API Key")
-        label2 = tk.Label(self.root, text="Steam ID")
+        label1 = tk.Label(self.root, text="Web API Key", background="white")
+        label2 = tk.Label(self.root, text="Steam ID", background="white")
         link1 = tk.Label(
             self.root,
             text="(https://steamcommunity.com/dev/apikey)",
+            background="white",
             foreground="blue",
             cursor="hand2",
         )
@@ -57,7 +60,11 @@ class UserInterface:
             lambda event: self.open_browser("https://steamcommunity.com/dev/apikey"),
         )
         link2 = tk.Label(
-            self.root, text="(https://steamid.io/)", foreground="blue", cursor="hand2"
+            self.root,
+            text="(https://steamid.io/)",
+            background="white",
+            foreground="blue",
+            cursor="hand2",
         )
         link2.bind("<Button-1>", lambda event: self.open_browser("https://steamid.io/"))
         entry1 = ttk.Entry(
@@ -143,9 +150,11 @@ class ResponseWindow:
         self.response.title("Steam Web API")
         self.response.resizable(True, True)
         self.steam_api = SteamAPI(api_key=self.api_key.get())
+
         # Create a canvas with the vertical scrollbar
         scrollbar = ttk.Scrollbar(self.response, orient="vertical")
         canvas = tk.Canvas(self.response, yscrollcommand=scrollbar.set)
+
         # Create a frame inside the canvas to hold the widgets
         frame = ttk.Frame(canvas)
 
