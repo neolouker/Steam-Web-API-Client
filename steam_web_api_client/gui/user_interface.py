@@ -167,12 +167,18 @@ class ResponseWindow:
         self.response.resizable(True, True)
         self.steam_api = SteamAPI(api_key=self.api_key.get())
 
+        # Create a style for white background
+        style = ttk.Style()
+        style.configure("White.TFrame", background="white")
+
         # Create a canvas with the vertical scrollbar
         scrollbar = ttk.Scrollbar(self.response, orient="vertical")
-        canvas = tk.Canvas(self.response, yscrollcommand=scrollbar.set)
+        canvas = tk.Canvas(
+            self.response, yscrollcommand=scrollbar.set, background="white"
+        )
 
         # Create a frame inside the canvas to hold the widgets
-        frame = ttk.Frame(canvas)
+        frame = ttk.Frame(canvas, style="White.TFrame")
 
         # Steam Web API
         games = self.steam_api.get_recently_played_games(steamid=self.steam_id.get())
@@ -234,21 +240,33 @@ class ResponseWindow:
             last_logoff_value = "Now"
 
         # Static Widgets
-        status_head = tk.Label(frame, text="Status", font=("Helvetica", 9, "bold"))
+        status_head = tk.Label(
+            frame, text="Status", font=("Helvetica", 9, "bold"), background="white"
+        )
         last_logoff_head = tk.Label(
-            frame, text="Last Time Seen", font=("Helvetica", 9, "bold")
+            frame,
+            text="Last Time Seen",
+            font=("Helvetica", 9, "bold"),
+            background="white",
         )
         separator1 = ttk.Separator(frame, orient="horizontal")
-        avatar_head = tk.Label(frame, image=self.steam_api.avatar_list[0])
-        username = tk.Label(frame, text=self.steam_api.username_list[0])
-        status = tk.Label(frame, text=user_status_value)
-        last_logoff = tk.Label(frame, text=last_logoff_value)
+        avatar_head = tk.Label(
+            frame, image=self.steam_api.avatar_list[0], background="white"
+        )
+        username = tk.Label(
+            frame, text=self.steam_api.username_list[0], background="white"
+        )
+        status = tk.Label(frame, text=user_status_value, background="white")
+        last_logoff = tk.Label(frame, text=last_logoff_value, background="white")
         separator2 = ttk.Separator(frame, orient="horizontal")
         playtime_2weeks_head = tk.Label(
-            frame, text="Last 2 Weeks", font=("Helvetica", 9, "bold")
+            frame,
+            text="Last 2 Weeks",
+            font=("Helvetica", 9, "bold"),
+            background="white",
         )
         playtime_forever_head = tk.Label(
-            frame, text="Overall", font=("Helvetica", 9, "bold")
+            frame, text="Overall", font=("Helvetica", 9, "bold"), background="white"
         )
         separator3 = ttk.Separator(frame, orient="horizontal")
 
@@ -283,13 +301,17 @@ class ResponseWindow:
             self.steam_api.fetch_playtime_forever(games=games, iteration=i)
 
             # Dynamic Widgets
-            icon = tk.Label(frame, image=self.steam_api.image_list[i])
-            title = tk.Label(frame, text=self.steam_api.name_list[i])
+            icon = tk.Label(
+                frame, image=self.steam_api.image_list[i], background="white"
+            )
+            title = tk.Label(
+                frame, text=self.steam_api.name_list[i], background="white"
+            )
             playtime_2weeks = tk.Label(
-                frame, text=self.steam_api.playtime_2weeks_list[i]
+                frame, text=self.steam_api.playtime_2weeks_list[i], background="white"
             )
             playtime_forever = tk.Label(
-                frame, text=self.steam_api.playtime_forever_list[i]
+                frame, text=self.steam_api.playtime_forever_list[i], background="white"
             )
 
             # Grid Placement
@@ -310,7 +332,7 @@ class ResponseWindow:
         scrollbar.pack(side="right", fill="y")
         scrollbar.config(command=canvas.yview)
         canvas.config(yscrollcommand=scrollbar.set)
-        canvas.pack(side="left", fill="both", expand=True, padx=(0, 5))
+        canvas.pack(side="left", fill="both", expand=True, padx=(0, 0), pady=(0, 0))
 
         canvas.create_window((0, 0), window=frame, anchor="nw")
 

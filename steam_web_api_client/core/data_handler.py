@@ -19,7 +19,7 @@ class DataHandler:
         self.api_key = api_key
         self.username_list = []
         self.id_list = []
-        self.userdata = []
+        self.user_data = []
 
     def read_data(self) -> str:
         """Reads api_key and steam_id from data.json.
