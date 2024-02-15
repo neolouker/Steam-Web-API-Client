@@ -12,5 +12,5 @@ pip install -r requirements.txt
 
 ### Current State
 
-> **Warning**
-> The client is in early development
+> [!WARNING]
+> The client is still in development!
