@@ -19,6 +19,7 @@ class DataHandler:
         self.api_key = api_key
         self.username_list = []
         self.id_list = []
+        self.userdata = []
 
     def read_data(self) -> str:
         """Reads api_key and steam_id from data.json.
@@ -30,9 +31,9 @@ class DataHandler:
             with open(file=self.data_path, mode="r", encoding="utf-8") as json_file:
                 loaded_data = json.load(json_file)
                 self.api_key = loaded_data["api_key"]
-                user_data = loaded_data["user_data"]
-                self.id_list = [entry["steam_id"] for entry in user_data]
-                self.username_list = [entry["username"] for entry in user_data]
+                self.user_data = loaded_data["user_data"]
+                self.id_list = [entry["steam_id"] for entry in self.user_data]
+                self.username_list = [entry["username"] for entry in self.user_data]
             print(f"Loaded data from {self.data_path}")
         except (FileNotFoundError, json.JSONDecodeError, KeyError):
             self.api_key = ""
@@ -57,3 +58,17 @@ class DataHandler:
         with open(file=self.data_path, mode="w", encoding="utf-8") as json_file:
             json.dump(input_data, json_file)
             print(f"Saved data to {self.data_path}")
+
+    def get_username_by_id(self, steam_id: str) -> str:
+        """Get the username associated with the given steam_id.
+
+        Args:
+            steam_id (str): The steam_id to look up.
+
+        Returns:
+            str: The corresponding username, or an empty string if not found.
+        """
+        for entry in self.user_data:
+            if entry["steam_id"] == steam_id:
+                return entry["username"]
+        return ""

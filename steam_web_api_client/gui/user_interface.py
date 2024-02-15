@@ -31,6 +31,7 @@ class UserInterface:
         self.data_path = os.path.join("steam_web_api_client", "data", "data.json")
         icon_path = os.path.join("steam_web_api_client", "assets", "icon.png")
         self.current_id = tk.StringVar()
+        self.current_user = tk.StringVar()
 
         # Window Config
         self.root.resizable(True, True)
@@ -83,6 +84,7 @@ class UserInterface:
         entry2 = ttk.Entry(
             self.root, textvariable=self.steam_id, width=40, justify="center"
         )
+        label3 = tk.Label(self.root, textvariable=self.current_user, background="white")
         combo = ttk.Combobox(
             self.root, values=self.data_handler.id_list, textvariable=self.current_id
         )
@@ -101,6 +103,7 @@ class UserInterface:
         link2.grid(row=1, column=1, padx=20, pady=(0, 10))
         entry1.grid(row=2, column=0, padx=20, pady=5, sticky="NSEW")
         entry2.grid(row=2, column=1, padx=20, pady=5, sticky="NSEW")
+        label3.grid(row=3, column=0, padx=20, pady=5)
         combo.grid(row=3, column=1, padx=20, pady=5)
         button1.grid(
             row=4, column=0, columnspan=3, padx=20, pady=(25, 5), sticky="NSEW"
@@ -127,6 +130,9 @@ class UserInterface:
         """Handle the steam ID in combobox changed event."""
         if self.current_id.get() is not None:
             self.steam_id.set(self.current_id.get())
+            self.current_user.set(
+                self.data_handler.get_username_by_id(self.current_id.get())
+            )
 
     def open_response_window(self) -> None:
         """Opens a window containing the response of the API."""
