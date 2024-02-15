@@ -1,4 +1,5 @@
 """Fetch and save information from Steam Web API"""
+
 import datetime
 import io
 import urllib.error
@@ -24,6 +25,7 @@ class SteamAPI:
     def __init__(self, api_key: str):
         self.api = WebAPI(key=api_key)
         self.avatar_list = []
+        self.username_list = []
         self.image_list = []
         self.name_list = []
         self.playtime_2weeks_list = []
@@ -102,7 +104,7 @@ class SteamAPI:
         Returns:
             str: username
         """
-        return summaries["response"]["players"][0]["personaname"]
+        self.username_list.append(summaries["response"]["players"][0]["personaname"])
 
     def fetch_user_status(self, summaries: dict) -> str:
         """Filter, process and return status of user.

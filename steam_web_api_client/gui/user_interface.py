@@ -182,6 +182,8 @@ class ResponseWindow:
 
         # Data Handler
         data_handler.api_key = self.api_key.get()
+        self.steam_api.fetch_username(summaries=summary)
+        data_handler.username_list.append(self.steam_api.username_list[0])
         if self.steam_id.get() not in data_handler.id_list:
             if len(data_handler.id_list) >= 10:
                 data_handler.id_list[-1] = self.steam_id.get()
@@ -220,7 +222,6 @@ class ResponseWindow:
         """
         # User Information
         self.steam_api.fetch_avatar(summaries=summary)
-        username_value = self.steam_api.fetch_username(summaries=summary)
         user_status_value = self.steam_api.fetch_user_status(summaries=summary)
         last_logoff_value = self.steam_api.fetch_last_logoff(summaries=summary)
         if user_status_value == "Online":
@@ -233,7 +234,7 @@ class ResponseWindow:
         )
         separator1 = ttk.Separator(frame, orient="horizontal")
         avatar_head = tk.Label(frame, image=self.steam_api.avatar_list[0])
-        username = tk.Label(frame, text=username_value)
+        username = tk.Label(frame, text=self.steam_api.username_list[0])
         status = tk.Label(frame, text=user_status_value)
         last_logoff = tk.Label(frame, text=last_logoff_value)
         separator2 = ttk.Separator(frame, orient="horizontal")

@@ -17,6 +17,7 @@ class DataHandler:
     def __init__(self, data_path: str, api_key: str = ""):
         self.data_path = data_path
         self.api_key = api_key
+        self.username_list = []
         self.id_list = []
 
     def read_data(self) -> str:
@@ -29,11 +30,12 @@ class DataHandler:
             with open(file=self.data_path, mode="r", encoding="utf-8") as json_file:
                 loaded_data = json.load(json_file)
                 self.api_key = loaded_data["api_key"]
-                self.id_list = list(loaded_data["steam_ids"])
+                user_data = loaded_data["user_data"]
+                self.id_list = [entry["steam_id"] for entry in user_data]
+                self.username_list = [entry["username"] for entry in user_data]
             print(f"Loaded data from {self.data_path}")
-        except (FileNotFoundError, json.JSONDecodeError):
+        except (FileNotFoundError, json.JSONDecodeError, KeyError):
             self.api_key = ""
-            self.id_list = []
             print(f"Couldn't read data from {self.data_path}")
             directory = os.path.dirname(self.data_path)
             if not os.path.exists(directory):
@@ -44,8 +46,14 @@ class DataHandler:
 
     def save_data(self) -> None:
         """Writes api_key and steam_id to data.json."""
-        input_data = {"api_key": "", "steam_ids": self.id_list}
-        input_data["api_key"] = self.api_key
+        user_data_list = [
+            {"steam_id": steam_id, "username": username}
+            for steam_id, username in zip(self.id_list, self.username_list)
+        ]
+        input_data = {
+            "api_key": self.api_key,
+            "user_data": user_data_list,
+        }
         with open(file=self.data_path, mode="w", encoding="utf-8") as json_file:
             json.dump(input_data, json_file)
             print(f"Saved data to {self.data_path}")
