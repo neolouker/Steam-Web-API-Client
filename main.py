@@ -2,7 +2,7 @@
 
 Graphical tool to fetch player information from Steam Web API.
 
-Requires all modules listed in requirement.txt to be installed.
+Requires all modules listed in requirements.txt to be installed.
 """
 
 from steam_web_api_client.gui.user_interface import UserInterface

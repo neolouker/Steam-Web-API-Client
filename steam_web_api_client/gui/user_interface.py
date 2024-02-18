@@ -349,5 +349,5 @@ class ResponseWindow:
         )
 
     def on_response_close(self) -> None:
-        """When closing the response window also closing root window."""
+        """When closing the response window also close root window."""
         self.root.destroy()

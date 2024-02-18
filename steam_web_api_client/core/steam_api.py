@@ -96,7 +96,7 @@ class SteamAPI:
             self.avatar_list.append(None)
 
     def fetch_username(self, summaries: dict) -> str:
-        """Filter and return username of user.
+        """Filter and return the username.
 
         Args:
             summaries (dict): data containing the fetched information about user
@@ -107,7 +107,7 @@ class SteamAPI:
         self.username_list.append(summaries["response"]["players"][0]["personaname"])
 
     def fetch_user_status(self, summaries: dict) -> str:
-        """Filter, process and return status of user.
+        """Filter, process and return user status.
 
         Args:
             summaries (dict): data containing the fetched information about user
@@ -137,7 +137,7 @@ class SteamAPI:
             summaries (dict): data containing the fetched information about user
 
         Returns:
-            str: time the user last logged off
+            str: the time the user last logged off
         """
         last_logoff = summaries["response"]["players"][0]["lastlogoff"]
         time = datetime.datetime.fromtimestamp(last_logoff)
