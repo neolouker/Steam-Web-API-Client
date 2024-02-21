@@ -47,12 +47,15 @@ class SteamAPI:
                 count=50,
                 format="json",
             )
+
+            if not response["response"]:
+                print("[WARNING] No access to this data! The profile may be private!")
+
             return response
 
         except requests.exceptions.HTTPError as http_err:
             # Handle HTTP errors
             print(f"HTTPError: {http_err}")
-            print("No access to this data! The profile may be private!")
             return None
 
     def get_player_summaries(self, steamid: int) -> dict:
@@ -139,7 +142,12 @@ class SteamAPI:
         Returns:
             str: the time the user last logged off
         """
-        last_logoff = summaries["response"]["players"][0]["lastlogoff"]
+        try:
+            last_logoff = summaries["response"]["players"][0]["lastlogoff"]
+        except KeyError as e:
+            print(f"[Warning] KeyError: {e}")
+            return "N/A"
+
         time = datetime.datetime.fromtimestamp(last_logoff)
         time_formatted = time.strftime("%d.%m.%Y %H:%M")
         return time_formatted

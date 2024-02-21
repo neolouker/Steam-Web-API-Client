@@ -167,10 +167,6 @@ class ResponseWindow:
         self.response.resizable(True, True)
         self.steam_api = SteamAPI(api_key=self.api_key.get())
 
-        # Create a style for white background
-        style = ttk.Style()
-        style.configure("White.TFrame", background="white")
-
         # Create a canvas with the vertical scrollbar
         scrollbar = ttk.Scrollbar(self.response, orient="vertical")
         canvas = tk.Canvas(
@@ -178,16 +174,16 @@ class ResponseWindow:
         )
 
         # Create a frame inside the canvas to hold the widgets
-        frame = ttk.Frame(canvas, style="White.TFrame")
+        frame = tk.Frame(canvas, background="white")
 
         # Steam Web API
         games = self.steam_api.get_recently_played_games(steamid=self.steam_id.get())
         summary = self.steam_api.get_player_summaries(steamid=steam_id.get())
 
         # Error Handling
-        if games is None or summary is None:
+        if not games["response"] or not summary["response"]:
             self.root.destroy()
-            print("Response Window has been closed!")
+            print("[INFO] Response Window has been closed!")
             user_interface = UserInterface()
             user_interface.root.mainloop()
             return
@@ -350,4 +346,5 @@ class ResponseWindow:
 
     def on_response_close(self) -> None:
         """When closing the response window also close root window."""
-        self.root.destroy()
+        if self.root.winfo_exists():
+            self.root.destroy()

@@ -34,10 +34,10 @@ class DataHandler:
                 self.user_data = loaded_data["user_data"]
                 self.id_list = [entry["steam_id"] for entry in self.user_data]
                 self.username_list = [entry["username"] for entry in self.user_data]
-            print(f"Loaded data from {self.data_path}")
+            print(f"[INFO] Loaded data from {self.data_path}")
         except (FileNotFoundError, json.JSONDecodeError, KeyError):
             self.api_key = ""
-            print(f"Couldn't read data from {self.data_path}")
+            print(f"[INFO] Couldn't read data from {self.data_path}")
             directory = os.path.dirname(self.data_path)
             if not os.path.exists(directory):
                 os.makedirs(directory)
@@ -57,7 +57,7 @@ class DataHandler:
         }
         with open(file=self.data_path, mode="w", encoding="utf-8") as json_file:
             json.dump(input_data, json_file)
-            print(f"Saved data to {self.data_path}")
+            print(f"[INFO] Saved data to {self.data_path}")
 
     def get_username_by_id(self, steam_id: str) -> str:
         """Get the username associated with the given steam_id.
