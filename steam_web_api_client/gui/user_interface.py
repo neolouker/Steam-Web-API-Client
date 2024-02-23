@@ -164,8 +164,10 @@ class ResponseWindow:
         self.steam_id = steam_id
         self.response = tk.Toplevel(self.root)
         self.response.title("Steam Web API")
-        self.response.resizable(True, True)
+        self.response.resizable(False, False)
         self.steam_api = SteamAPI(api_key=self.api_key.get())
+        self.row_end = 0
+        self.total_time_2weeks = 0
 
         # Create a canvas with the vertical scrollbar
         scrollbar = ttk.Scrollbar(self.response, orient="vertical")
@@ -206,7 +208,25 @@ class ResponseWindow:
         self.create_static_widgets(summary=summary, frame=frame)
 
         # Create and place dynamic widgets
-        self.create_dynamic_widgets(amount_games=amount_games, games=games, frame=frame)
+        self.total_time_2weeks = self.create_dynamic_widgets(
+            amount_games=amount_games, games=games, frame=frame
+        )
+
+        separator4 = ttk.Separator(frame, orient="horizontal")
+        separator4.grid(row=self.row_end, column=0, columnspan=4, sticky="WE")
+
+        str_total_time_2weeks = (
+            f"{divmod(self.total_time_2weeks, 60)[0]:4}h "
+            f"{divmod(self.total_time_2weeks, 60)[1]:02}min"
+        )
+
+        label4 = tk.Label(
+            frame,
+            text=str_total_time_2weeks,
+            font=("Helvetica", 9, "bold"),
+            background="white",
+        )
+        label4.grid(row=self.row_end + 1, column=2, padx=45, pady=15, sticky="E")
 
         # Configure canvas
         self.config_canvas(canvas=canvas, scrollbar=scrollbar, frame=frame)
@@ -281,20 +301,28 @@ class ResponseWindow:
 
     def create_dynamic_widgets(
         self, amount_games: int, games: dict, frame: ttk.Frame
-    ) -> None:
+    ) -> int:
         """Create widgets showing game information.
 
         Args:
             amount_games (int): amount of games returned from API
             games (dict): data containing the fetched information about games
             frame (ttk.Frame): the area to place widgets onto
+
+        Returns:
+            int: total played time in 2 weeks
         """
+
+        total_time_2weeks = 0
+
         for i in range(amount_games):
             # Playtime Information
             self.steam_api.fetch_icons(games=games, iteration=i)
             self.steam_api.fetch_names(games=games, iteration=i)
             self.steam_api.fetch_playtime_2weeks(games=games, iteration=i)
             self.steam_api.fetch_playtime_forever(games=games, iteration=i)
+
+            total_time_2weeks += games["response"]["games"][i]["playtime_2weeks"]
 
             # Dynamic Widgets
             icon = tk.Label(
@@ -316,6 +344,10 @@ class ResponseWindow:
             title.grid(row=row_begin, column=1, padx=(5, 30), pady=5, sticky="W")
             playtime_2weeks.grid(row=row_begin, column=2, padx=45, pady=5, sticky="E")
             playtime_forever.grid(row=row_begin, column=3, padx=45, pady=5, sticky="E")
+
+            self.row_end = row_begin + 1
+
+        return total_time_2weeks
 
     def config_canvas(
         self, canvas: tk.Canvas, scrollbar: tk.Scrollbar, frame: tk.Frame
