@@ -10,6 +10,8 @@ pip install -r requirements.txt
 
 ## About
 
+![Image](steam_web_api_client/assets/Screenshot.png)
+
 ### Current State
 
 > [!WARNING]
