@@ -315,37 +315,55 @@ class ResponseWindow:
 
         total_time_2weeks = 0
 
-        for i in range(amount_games):
-            # Playtime Information
-            self.steam_api.fetch_icons(games=games, iteration=i)
-            self.steam_api.fetch_names(games=games, iteration=i)
-            self.steam_api.fetch_playtime_2weeks(games=games, iteration=i)
-            self.steam_api.fetch_playtime_forever(games=games, iteration=i)
+        if amount_games > 0:
+            for i in range(amount_games):
+                # Playtime Information
+                self.steam_api.fetch_icons(games=games, iteration=i)
+                self.steam_api.fetch_names(games=games, iteration=i)
+                self.steam_api.fetch_playtime_2weeks(games=games, iteration=i)
+                self.steam_api.fetch_playtime_forever(games=games, iteration=i)
 
-            total_time_2weeks += games["response"]["games"][i]["playtime_2weeks"]
+                total_time_2weeks += games["response"]["games"][i]["playtime_2weeks"]
 
-            # Dynamic Widgets
-            icon = tk.Label(
-                frame, image=self.steam_api.image_list[i], background="white"
-            )
-            title = tk.Label(
-                frame, text=self.steam_api.name_list[i], background="white"
-            )
-            playtime_2weeks = tk.Label(
-                frame, text=self.steam_api.playtime_2weeks_list[i], background="white"
-            )
-            playtime_forever = tk.Label(
-                frame, text=self.steam_api.playtime_forever_list[i], background="white"
-            )
+                # Dynamic Widgets
+                icon = tk.Label(
+                    frame, image=self.steam_api.image_list[i], background="white"
+                )
+                title = tk.Label(
+                    frame, text=self.steam_api.name_list[i], background="white"
+                )
+                playtime_2weeks = tk.Label(
+                    frame,
+                    text=self.steam_api.playtime_2weeks_list[i],
+                    background="white",
+                )
+                playtime_forever = tk.Label(
+                    frame,
+                    text=self.steam_api.playtime_forever_list[i],
+                    background="white",
+                )
 
-            # Grid Placement
-            row_begin = i + 6
-            icon.grid(row=row_begin, column=0, padx=5, pady=5)
-            title.grid(row=row_begin, column=1, padx=(5, 30), pady=5, sticky="W")
-            playtime_2weeks.grid(row=row_begin, column=2, padx=45, pady=5, sticky="E")
-            playtime_forever.grid(row=row_begin, column=3, padx=45, pady=5, sticky="E")
+                # Grid Placement
+                row_begin = i + 6
+                icon.grid(row=row_begin, column=0, padx=5, pady=5)
+                title.grid(row=row_begin, column=1, padx=(5, 30), pady=5, sticky="W")
+                playtime_2weeks.grid(
+                    row=row_begin, column=2, padx=45, pady=5, sticky="E"
+                )
+                playtime_forever.grid(
+                    row=row_begin, column=3, padx=45, pady=5, sticky="E"
+                )
 
-            self.row_end = row_begin + 1
+                self.row_end = row_begin + 1
+        else:
+            placeholder_label = tk.Label(
+                frame,
+                text="No Games Found",
+                background="white",
+                font=("Helvetica", 11),
+            )
+            placeholder_label.grid(row=6, column=0, columnspan=4, padx=5, pady=20)
+            self.row_end = 7
 
         return total_time_2weeks
 
